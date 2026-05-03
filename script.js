@@ -1,6 +1,5 @@
 const navLinks = document.getElementById("navLinks");
 const trail = document.querySelector(".cursor-trail");
-const pupils = document.querySelectorAll(".pupil");
 const parallaxZone = document.querySelector(".parallax-zone");
 const parallaxItems = document.querySelectorAll(".parallax");
 
@@ -24,31 +23,8 @@ document.addEventListener("mousemove", (event) => {
     trail.style.top = `${event.clientY}px`;
   }
 
-  pupils.forEach((pupil) => {
-    const parent = pupil.parentElement;
-    if (!parent) return;
-
-    const rect = parent.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const distanceX = (event.clientX - centerX) / rect.width;
-    const distanceY = (event.clientY - centerY) / rect.height;
-
-    const moveX = distanceX * 22;
-    const moveY = distanceY * 13;
-
-    pupil.style.transform = `
-      translate(
-        calc(-50% + ${moveX}px),
-        calc(-50% + ${moveY}px)
-      )
-    `;
-  });
-
   if (parallaxZone) {
     const rect = parallaxZone.getBoundingClientRect();
-
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
 
@@ -59,19 +35,19 @@ document.addEventListener("mousemove", (event) => {
   }
 });
 
-function randomStrongGlitch() {
+function triggerManualGlitch() {
   document.body.classList.add("glitching");
 
   setTimeout(() => {
     document.body.classList.remove("glitching");
-  }, 520);
+  }, 650);
 }
 
 function scheduleRandomGlitch() {
-  const delay = 4200 + Math.random() * 2600;
+  const delay = 3600 + Math.random() * 2800;
 
   setTimeout(() => {
-    randomStrongGlitch();
+    triggerManualGlitch();
     scheduleRandomGlitch();
   }, delay);
 }
@@ -86,7 +62,9 @@ const observer = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.16 },
+  {
+    threshold: 0.16,
+  },
 );
 
 document.querySelectorAll(".reveal").forEach((element) => {
@@ -96,10 +74,10 @@ document.querySelectorAll(".reveal").forEach((element) => {
 function submitForm(event) {
   event.preventDefault();
 
-  randomStrongGlitch();
+  triggerManualGlitch();
 
   alert(
-    "Your name has been accepted. Something beneath the city has turned toward you.",
+    "Report accepted. Archive entry created. Do not discuss this incident again.",
   );
 
   event.target.reset();
