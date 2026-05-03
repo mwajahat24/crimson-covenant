@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crimson Covenant</title>
+    <title>The Wound Beneath</title>
 
     <style>
       * {
@@ -16,87 +16,183 @@
         scroll-behavior: smooth;
       }
 
+      :root {
+        --black: #010102;
+        --blood: #ff003c;
+        --red: #9b001f;
+        --green: #00ffd1;
+        --blue: #2e9cff;
+        --pale: #e9f8f4;
+        --muted: #aaa0a6;
+        --glass: rgba(2, 4, 7, 0.82);
+        --border: rgba(0, 255, 209, 0.22);
+      }
+
       body {
         font-family: Georgia, "Times New Roman", serif;
-        background: #030000;
-        color: #f8dddd;
+        background: #010102;
+        color: var(--pale);
         overflow-x: hidden;
       }
 
-      :root {
-        --red: #e60035;
-        --red2: #ff174d;
-        --blood: #8f001f;
-        --deep: #120004;
-        --black: #030000;
-        --glass: rgba(18, 0, 6, 0.78);
-        --border: rgba(255, 0, 60, 0.28);
-        --muted: #c99b9b;
+      body.glitching {
+        animation: pageGlitch 0.18s steps(2) 2;
+      }
+
+      @keyframes pageGlitch {
+        0% {
+          transform: translate(0);
+          filter: hue-rotate(0deg);
+        }
+        35% {
+          transform: translate(6px, -3px) skewX(2deg);
+          filter: hue-rotate(80deg);
+        }
+        70% {
+          transform: translate(-5px, 2px) skewX(-2deg);
+          filter: hue-rotate(-60deg);
+        }
+        100% {
+          transform: translate(0);
+          filter: hue-rotate(0deg);
+        }
       }
 
       body::before {
         content: "";
         position: fixed;
         inset: 0;
+        z-index: -6;
         background:
           radial-gradient(
-            circle at 22% 18%,
-            rgba(255, 0, 64, 0.25),
+            circle at 50% 18%,
+            rgba(0, 255, 209, 0.16),
+            transparent 18%
+          ),
+          radial-gradient(
+            circle at 14% 22%,
+            rgba(255, 0, 60, 0.22),
             transparent 28%
           ),
           radial-gradient(
-            circle at 75% 70%,
-            rgba(150, 0, 35, 0.28),
-            transparent 35%
+            circle at 86% 78%,
+            rgba(46, 156, 255, 0.17),
+            transparent 32%
           ),
-          linear-gradient(135deg, #020000, #120005 55%, #000);
-        z-index: -4;
+          linear-gradient(135deg, #000, #05070a 45%, #02030a);
       }
 
       body::after {
         content: "";
         position: fixed;
         inset: 0;
+        z-index: -5;
+        opacity: 0.16;
+        pointer-events: none;
         background-image:
-          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-          linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.025) 1px,
-            transparent 1px
-          );
-        background-size: 45px 45px;
-        opacity: 0.35;
-        z-index: -3;
+          linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 36px 36px;
+        animation: gridShift 7s infinite alternate ease-in-out;
       }
 
-      .mist {
+      @keyframes gridShift {
+        to {
+          transform: skewX(-3deg) translateY(18px);
+        }
+      }
+
+      .static {
         position: fixed;
         inset: 0;
-        background:
-          radial-gradient(
-            circle at 10% 80%,
-            rgba(255, 255, 255, 0.08),
-            transparent 24%
-          ),
-          radial-gradient(
-            circle at 90% 15%,
-            rgba(255, 255, 255, 0.055),
-            transparent 26%
-          );
-        filter: blur(24px);
-        animation: mistMove 10s infinite alternate ease-in-out;
+        z-index: -4;
+        opacity: 0.08;
         pointer-events: none;
-        z-index: -2;
+        background: repeating-radial-gradient(
+          circle at 30% 20%,
+          rgba(255, 255, 255, 0.7) 0 1px,
+          transparent 1px 3px
+        );
+        mix-blend-mode: screen;
+        animation: staticMove 0.22s infinite steps(2);
       }
 
-      @keyframes mistMove {
-        from {
-          transform: translateX(-25px);
-          opacity: 0.45;
+      @keyframes staticMove {
+        50% {
+          transform: translate(-8px, 5px);
+          opacity: 0.13;
         }
+      }
+
+      .fog {
+        position: fixed;
+        inset: -18%;
+        z-index: -3;
+        filter: blur(26px);
+        pointer-events: none;
+        background:
+          radial-gradient(
+            circle at 15% 80%,
+            rgba(255, 0, 60, 0.18),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 82% 35%,
+            rgba(0, 255, 209, 0.12),
+            transparent 32%
+          ),
+          radial-gradient(
+            circle at 50% 55%,
+            rgba(46, 156, 255, 0.11),
+            transparent 30%
+          );
+        animation: fogMove 10s infinite alternate ease-in-out;
+      }
+
+      @keyframes fogMove {
         to {
-          transform: translateX(25px);
-          opacity: 0.9;
+          transform: translateX(50px) scale(1.06);
+        }
+      }
+
+      .cursor-trail {
+        position: fixed;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        background: radial-gradient(
+          circle,
+          rgba(0, 255, 209, 0.7),
+          rgba(255, 0, 60, 0.25),
+          transparent 70%
+        );
+        filter: blur(4px);
+        transform: translate(-50%, -50%);
+      }
+
+      .whisper {
+        position: fixed;
+        z-index: -1;
+        color: rgba(0, 255, 209, 0.13);
+        font-size: 0.85rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        pointer-events: none;
+        animation: whisperFade 8s infinite ease-in-out;
+      }
+
+      @keyframes whisperFade {
+        0%,
+        100% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        45%,
+        55% {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
 
@@ -104,22 +200,33 @@
         position: fixed;
         top: 0;
         width: 100%;
+        height: 76px;
         z-index: 999;
-        padding: 20px 7%;
+        padding: 0 7%;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        background: rgba(0, 0, 0, 0.72);
-        backdrop-filter: blur(14px);
+        justify-content: space-between;
+        background: rgba(0, 0, 0, 0.78);
         border-bottom: 1px solid var(--border);
+        backdrop-filter: blur(16px);
       }
 
       .logo {
-        color: var(--red);
-        font-size: 1.45rem;
-        letter-spacing: 4px;
+        color: var(--green);
+        letter-spacing: 5px;
         font-weight: bold;
-        text-shadow: 0 0 18px rgba(230, 0, 53, 0.9);
+        font-size: 1.25rem;
+        text-shadow:
+          0 0 16px rgba(0, 255, 209, 0.8),
+          0 0 26px rgba(255, 0, 60, 0.5);
+        animation: logoPulse 2.8s infinite alternate ease-in-out;
+      }
+
+      @keyframes logoPulse {
+        to {
+          filter: blur(0.4px);
+          opacity: 1;
+        }
       }
 
       .nav-links {
@@ -127,32 +234,28 @@
         gap: 26px;
         list-style: none;
       }
-
       .nav-links a {
-        color: #f3c2c2;
+        color: #d8d0d4;
         text-decoration: none;
-        font-size: 0.95rem;
-        transition: 0.3s;
+        transition: 0.25s;
       }
-
       .nav-links a:hover {
-        color: var(--red);
-        text-shadow: 0 0 12px var(--red);
+        color: var(--blood);
+        text-shadow: 0 0 14px var(--blood);
       }
 
       .menu-btn {
         display: none;
         background: transparent;
-        border: 1px solid var(--border);
         color: white;
+        border: 1px solid var(--border);
         padding: 8px 12px;
         border-radius: 8px;
-        cursor: pointer;
       }
 
       .hero {
         min-height: 100vh;
-        padding: 140px 7% 80px;
+        padding: 145px 7% 80px;
         display: grid;
         grid-template-columns: 1.05fr 0.95fr;
         gap: 50px;
@@ -160,40 +263,55 @@
       }
 
       .eyebrow {
-        color: var(--red);
+        color: var(--green);
         letter-spacing: 5px;
         text-transform: uppercase;
+        font-size: 0.8rem;
         margin-bottom: 18px;
-        font-size: 0.85rem;
+        text-shadow: 0 0 12px rgba(0, 255, 209, 0.8);
       }
 
       h1 {
-        font-size: clamp(3.2rem, 8vw, 7.4rem);
-        line-height: 0.9;
+        font-size: clamp(3.5rem, 8vw, 7.7rem);
+        line-height: 0.88;
         text-transform: uppercase;
         color: white;
         text-shadow:
-          0 0 16px rgba(230, 0, 53, 0.85),
-          0 0 60px rgba(230, 0, 53, 0.45);
+          0 0 16px rgba(255, 0, 60, 0.85),
+          0 0 44px rgba(0, 255, 209, 0.22);
+        animation: titleWarp 4s infinite alternate ease-in-out;
       }
 
       h1 span,
       h2 span {
-        color: var(--red);
+        color: var(--blood);
+      }
+
+      @keyframes titleWarp {
+        to {
+          letter-spacing: 2px;
+          filter: blur(0.3px);
+        }
+      }
+
+      .hero p,
+      .panel p,
+      .card p,
+      .district p {
+        color: #c9c1c5;
+        line-height: 1.85;
       }
 
       .hero p {
         margin-top: 28px;
-        max-width: 670px;
-        color: #d8abab;
-        font-size: 1.15rem;
-        line-height: 1.8;
+        max-width: 680px;
+        font-size: 1.12rem;
       }
 
       .hero-buttons {
         margin-top: 38px;
         display: flex;
-        gap: 18px;
+        gap: 16px;
         flex-wrap: wrap;
       }
 
@@ -201,27 +319,37 @@
         display: inline-block;
         padding: 15px 30px;
         border-radius: 999px;
-        text-decoration: none;
         color: white;
-        border: 1px solid var(--red);
-        background: linear-gradient(135deg, #720019, var(--red));
-        box-shadow: 0 0 28px rgba(230, 0, 53, 0.45);
+        text-decoration: none;
+        border: 1px solid var(--border);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(0, 255, 209, 0.12),
+            rgba(255, 0, 60, 0.2)
+          ),
+          linear-gradient(135deg, #071014, #190008);
+        box-shadow:
+          0 0 24px rgba(0, 255, 209, 0.22),
+          0 0 28px rgba(255, 0, 60, 0.22);
         transition: 0.3s;
         cursor: pointer;
       }
 
       .btn:hover {
         transform: translateY(-4px);
-        box-shadow: 0 0 45px rgba(230, 0, 53, 0.8);
+        box-shadow:
+          0 0 42px rgba(0, 255, 209, 0.42),
+          0 0 52px rgba(255, 0, 60, 0.45);
       }
 
-      .btn.secondary {
-        background: transparent;
-        color: #ffc4c4;
+      .btn.red {
+        border-color: rgba(255, 0, 60, 0.35);
+        background: linear-gradient(135deg, #28000a, #9b001f);
       }
 
       section {
-        padding: 90px 7%;
+        padding: 92px 7%;
         position: relative;
       }
 
@@ -231,206 +359,340 @@
       }
 
       .section-title h2 {
-        font-size: clamp(2.2rem, 5vw, 4.3rem);
-        color: white;
-        text-shadow: 0 0 22px rgba(230, 0, 53, 0.6);
+        font-size: clamp(2.4rem, 5vw, 4.6rem);
+        text-shadow:
+          0 0 24px rgba(255, 0, 60, 0.5),
+          0 0 28px rgba(0, 255, 209, 0.22);
       }
 
-      .hero-art {
-        min-height: 610px;
+      .reveal {
+        opacity: 0;
+        transform: translateY(45px);
+        transition: 1s ease;
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .eldritch-art {
+        min-height: 640px;
         border-radius: 36px;
         position: relative;
         overflow: hidden;
         border: 1px solid var(--border);
         background:
           radial-gradient(
-            circle at 50% 18%,
-            rgba(255, 0, 60, 0.5),
-            transparent 18%
+            circle at 50% 28%,
+            rgba(0, 255, 209, 0.24),
+            transparent 22%
           ),
-          linear-gradient(to bottom, #130008 0%, #050004 48%, #010000 100%);
+          radial-gradient(
+            circle at 50% 45%,
+            rgba(255, 0, 60, 0.2),
+            transparent 33%
+          ),
+          linear-gradient(to bottom, #081018, #020203 60%, #000);
         box-shadow:
-          0 0 60px rgba(230, 0, 53, 0.28),
-          inset 0 0 120px rgba(0, 0, 0, 0.92);
+          0 0 60px rgba(0, 255, 209, 0.18),
+          0 0 65px rgba(255, 0, 60, 0.18),
+          inset 0 0 140px rgba(0, 0, 0, 0.92);
       }
 
-      .moon {
+      .black-sun {
         position: absolute;
-        top: 48px;
+        top: 54px;
         left: 50%;
-        width: 150px;
-        height: 150px;
+        width: 185px;
+        height: 185px;
         transform: translateX(-50%);
         border-radius: 50%;
         background: radial-gradient(
-          circle at 35% 35%,
-          #ff8aa0,
-          #dc0032 45%,
-          #6a0018 75%
+          circle,
+          #010102 0 42%,
+          #00ffd1 45%,
+          #123b3a 52%,
+          #ff003c 72%
         );
         box-shadow:
-          0 0 50px rgba(255, 0, 60, 0.85),
-          0 0 120px rgba(255, 0, 60, 0.38);
+          0 0 55px rgba(0, 255, 209, 0.72),
+          0 0 100px rgba(255, 0, 60, 0.38);
+        animation: eyeBreathe 3.5s infinite alternate ease-in-out;
       }
 
-      .castle-silhouette {
+      .pupil {
         position: absolute;
-        left: 8%;
-        right: 8%;
-        bottom: 105px;
-        height: 300px;
+        left: 50%;
+        top: 50%;
+        width: 118px;
+        height: 48px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 50% 50%,
+          var(--blood) 0 15%,
+          #020203 18% 42%,
+          var(--green) 44% 48%,
+          transparent 52%
+        );
+        box-shadow: 0 0 30px rgba(255, 0, 60, 0.8);
+        transition: 0.08s linear;
       }
 
-      .tower {
+      @keyframes eyeBreathe {
+        to {
+          transform: translateX(-50%) scale(1.04);
+        }
+      }
+
+      .tentacle {
         position: absolute;
-        bottom: 0;
-        width: 80px;
-        background: linear-gradient(to bottom, #160007, #050000);
-        border: 1px solid rgba(255, 0, 60, 0.18);
+        width: 90px;
+        height: 360px;
+        bottom: -90px;
+        background: linear-gradient(
+          to top,
+          #030304,
+          #0b1014,
+          rgba(0, 255, 209, 0.22)
+        );
+        border-radius: 80% 80% 40% 40%;
+        filter: drop-shadow(0 0 20px rgba(0, 255, 209, 0.18));
+        transform-origin: bottom center;
+        opacity: 0.95;
+        animation: writhe 5s infinite alternate ease-in-out;
+        transition: 0.35s;
       }
 
-      .tower::before {
+      .eldritch-art:hover .tentacle {
+        filter: drop-shadow(0 0 32px rgba(255, 0, 60, 0.35));
+      }
+
+      .tentacle::before {
         content: "";
         position: absolute;
-        top: -55px;
-        left: -10px;
-        border-left: 50px solid transparent;
-        border-right: 50px solid transparent;
-        border-bottom: 58px solid #080003;
-        filter: drop-shadow(0 0 10px rgba(255, 0, 60, 0.25));
+        inset: 28px 24px;
+        border-radius: 50%;
+        background:
+          radial-gradient(
+            circle at 50% 15%,
+            var(--green) 0 4px,
+            transparent 5px
+          ),
+          radial-gradient(
+            circle at 50% 35%,
+            var(--blood) 0 4px,
+            transparent 5px
+          ),
+          radial-gradient(circle at 50% 55%, var(--blue) 0 4px, transparent 5px);
+        opacity: 0.8;
       }
 
-      .tower::after {
+      .tenta1 {
+        left: 7%;
+        transform: rotate(-18deg);
+      }
+      .tenta2 {
+        right: 8%;
+        transform: rotate(16deg);
+        height: 410px;
+        animation-delay: 1.1s;
+      }
+      .tenta3 {
+        left: 38%;
+        transform: rotate(4deg);
+        height: 310px;
+        opacity: 0.72;
+        animation-delay: 2s;
+      }
+
+      @keyframes writhe {
+        to {
+          border-radius: 90% 60% 40% 50%;
+          transform: rotate(4deg) translateX(12px);
+        }
+      }
+
+      .eldritch-city {
+        position: absolute;
+        left: 5%;
+        right: 5%;
+        bottom: 125px;
+        height: 330px;
+      }
+
+      .spire {
+        position: absolute;
+        bottom: 0;
+        width: 70px;
+        background: linear-gradient(to bottom, #111722, #020203);
+        border: 1px solid rgba(0, 255, 209, 0.13);
+      }
+
+      .spire::before {
+        content: "";
+        position: absolute;
+        top: -90px;
+        left: -18px;
+        border-left: 53px solid transparent;
+        border-right: 53px solid transparent;
+        border-bottom: 92px solid #030406;
+        filter: drop-shadow(0 0 14px rgba(0, 255, 209, 0.2));
+      }
+
+      .spire::after {
         content: "";
         position: absolute;
         top: 70px;
-        left: 28px;
-        width: 24px;
-        height: 48px;
-        border-radius: 20px 20px 2px 2px;
-        background: radial-gradient(circle, #ff003c, #3a000d);
-        box-shadow: 0 0 18px rgba(255, 0, 60, 0.8);
+        left: 24px;
+        width: 22px;
+        height: 55px;
+        border-radius: 18px 18px 2px 2px;
+        background: radial-gradient(circle, var(--green), #00352c);
+        box-shadow: 0 0 18px rgba(0, 255, 209, 0.75);
+        animation: lanternFlicker 1.8s infinite alternate;
       }
 
-      .t1 {
+      @keyframes lanternFlicker {
+        20% {
+          opacity: 0.45;
+        }
+        45% {
+          opacity: 1;
+        }
+        70% {
+          opacity: 0.6;
+        }
+        100% {
+          opacity: 0.95;
+        }
+      }
+
+      .s1 {
         left: 2%;
         height: 225px;
       }
-      .t2 {
-        left: 24%;
-        height: 285px;
-        width: 95px;
+      .s2 {
+        left: 20%;
+        height: 315px;
+        width: 92px;
       }
-      .t3 {
-        right: 24%;
-        height: 285px;
-        width: 95px;
+      .s3 {
+        left: 43%;
+        height: 280px;
+        width: 120px;
       }
-      .t4 {
+      .s4 {
+        right: 20%;
+        height: 330px;
+        width: 92px;
+      }
+      .s5 {
         right: 2%;
-        height: 225px;
+        height: 230px;
       }
 
-      .main-castle {
+      .cathedral {
         position: absolute;
-        left: 22%;
-        right: 22%;
+        left: 29%;
+        right: 29%;
         bottom: 0;
-        height: 210px;
-        background: linear-gradient(to bottom, #190009, #050000);
-        border: 1px solid rgba(255, 0, 60, 0.2);
-        border-radius: 14px 14px 0 0;
+        height: 240px;
+        background: linear-gradient(to bottom, #121721, #020203);
+        border: 1px solid rgba(255, 0, 60, 0.18);
+        border-radius: 18px 18px 0 0;
       }
 
-      .main-castle::before,
-      .main-castle::after {
+      .cathedral::before,
+      .cathedral::after {
         content: "";
         position: absolute;
         top: 58px;
-        width: 32px;
-        height: 65px;
+        width: 30px;
+        height: 75px;
         border-radius: 25px 25px 3px 3px;
-        background: radial-gradient(circle, #ff003c, #2a0009);
-        box-shadow: 0 0 18px rgba(255, 0, 60, 0.75);
+        background: radial-gradient(circle, var(--blue), #001a35 72%);
+        box-shadow: 0 0 18px rgba(46, 156, 255, 0.8);
+        animation: lanternFlicker 2.3s infinite alternate;
       }
 
-      .main-castle::before {
-        left: 28%;
+      .cathedral::before {
+        left: 24%;
       }
-      .main-castle::after {
-        right: 28%;
+      .cathedral::after {
+        right: 24%;
       }
 
       .gate {
         position: absolute;
-        left: 50%;
         bottom: 0;
-        width: 78px;
-        height: 112px;
+        left: 50%;
+        width: 88px;
+        height: 132px;
         transform: translateX(-50%);
-        border-radius: 48px 48px 0 0;
-        background: linear-gradient(to bottom, #28000b, #000);
-        border: 1px solid rgba(255, 0, 60, 0.24);
-        box-shadow: inset 0 0 26px rgba(255, 0, 60, 0.2);
+        border-radius: 60px 60px 0 0;
+        background: linear-gradient(to bottom, #210007, #000);
+        border: 1px solid rgba(255, 0, 60, 0.28);
+        box-shadow: inset 0 0 28px rgba(255, 0, 60, 0.24);
       }
 
-      .bat {
+      .crystal {
         position: absolute;
-        color: #050000;
-        font-size: 34px;
-        text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
-        animation: fly 7s infinite ease-in-out;
+        bottom: 118px;
+        width: 40px;
+        height: 125px;
+        clip-path: polygon(50% 0, 100% 28%, 78% 100%, 22% 100%, 0 28%);
+        background: linear-gradient(
+          135deg,
+          var(--green),
+          var(--blue),
+          rgba(255, 0, 60, 0.35)
+        );
+        box-shadow:
+          0 0 25px rgba(0, 255, 209, 0.55),
+          inset 0 0 18px rgba(255, 255, 255, 0.16);
+        animation: crystalPulse 2.4s infinite alternate ease-in-out;
       }
 
-      .bat.one {
-        top: 110px;
-        left: 18%;
-        animation-delay: 0s;
-      }
-      .bat.two {
-        top: 170px;
-        right: 20%;
-        animation-delay: 1.5s;
-        font-size: 28px;
-      }
-      .bat.three {
-        top: 250px;
-        left: 62%;
-        animation-delay: 2.4s;
-        font-size: 24px;
-      }
-
-      @keyframes fly {
-        0%,
-        100% {
-          transform: translateY(0) rotate(-8deg);
-          opacity: 0.6;
-        }
-        50% {
-          transform: translateY(-24px) rotate(9deg);
-          opacity: 1;
+      @keyframes crystalPulse {
+        to {
+          filter: brightness(1.45);
         }
       }
 
-      .red-fog {
+      .c1 {
+        left: 13%;
+      }
+      .c2 {
+        right: 15%;
+        height: 155px;
+        width: 48px;
+      }
+      .c3 {
+        right: 6%;
+        height: 92px;
+      }
+
+      .ground-fog {
         position: absolute;
         left: -10%;
         right: -10%;
         bottom: 0;
-        height: 170px;
+        height: 205px;
         background:
           radial-gradient(
-            circle at 30% 80%,
-            rgba(255, 0, 60, 0.32),
-            transparent 30%
+            circle at 28% 70%,
+            rgba(255, 0, 60, 0.35),
+            transparent 34%
           ),
           radial-gradient(
-            circle at 70% 60%,
-            rgba(180, 0, 38, 0.28),
-            transparent 35%
+            circle at 72% 60%,
+            rgba(0, 255, 209, 0.24),
+            transparent 36%
           ),
-          linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
-        filter: blur(8px);
+          linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+        filter: blur(9px);
       }
 
       .floating-box {
@@ -438,323 +700,206 @@
         left: 28px;
         right: 28px;
         bottom: 28px;
-        z-index: 5;
+        z-index: 8;
         padding: 26px;
         border-radius: 24px;
-        background: rgba(0, 0, 0, 0.66);
-        border: 1px solid var(--border);
+        background: rgba(1, 2, 4, 0.75);
+        border: 1px solid rgba(0, 255, 209, 0.25);
         backdrop-filter: blur(10px);
       }
 
       .floating-box h3 {
-        color: var(--red);
-        margin-bottom: 10px;
+        color: var(--green);
         font-size: 1.5rem;
+        margin-bottom: 10px;
       }
 
-      .floating-box p {
-        color: #e5b9b9;
-        line-height: 1.6;
-      }
-
-      .about-grid,
-      .castle,
-      .contact-wrapper {
+      .grid-2 {
         display: grid;
-        grid-template-columns: 0.9fr 1.1fr;
+        grid-template-columns: 0.95fr 1.05fr;
         gap: 32px;
         align-items: stretch;
       }
 
-      .panel {
+      .panel,
+      .card,
+      .district,
+      .price-card {
         background: var(--glass);
-        border: 1px solid var(--border);
+        border: 1px solid rgba(0, 255, 209, 0.16);
         border-radius: 30px;
         padding: 36px;
-        box-shadow: 0 0 30px rgba(230, 0, 53, 0.12);
+        box-shadow:
+          0 0 28px rgba(0, 255, 209, 0.08),
+          0 0 32px rgba(255, 0, 60, 0.08);
       }
 
       .panel h3 {
-        color: var(--red);
+        color: var(--green);
         font-size: 2rem;
         margin-bottom: 20px;
       }
 
-      .panel p {
-        color: #d8abab;
-        line-height: 1.85;
-        margin-bottom: 18px;
+      .breathing {
+        animation: breathe 5s infinite alternate ease-in-out;
       }
 
-      /* IMPROVED LORE GRAPHIC */
-      .stained-glass-art {
-        min-height: 510px;
+      @keyframes breathe {
+        to {
+          transform: scale(1.018);
+        }
+      }
+
+      .ritual-art {
+        min-height: 535px;
         border-radius: 30px;
-        border: 1px solid var(--border);
         position: relative;
         overflow: hidden;
+        border: 1px solid rgba(46, 156, 255, 0.24);
         background:
           radial-gradient(
-            circle at 50% 20%,
-            rgba(255, 0, 60, 0.35),
-            transparent 24%
+            circle at 50% 40%,
+            rgba(0, 255, 209, 0.21),
+            transparent 28%
           ),
-          linear-gradient(to bottom, #140007, #030000);
+          radial-gradient(
+            circle at 50% 65%,
+            rgba(255, 0, 60, 0.24),
+            transparent 32%
+          ),
+          linear-gradient(to bottom, #071018, #020203);
         box-shadow:
-          0 0 50px rgba(230, 0, 53, 0.22),
-          inset 0 0 90px rgba(0, 0, 0, 0.88);
+          0 0 48px rgba(46, 156, 255, 0.18),
+          inset 0 0 95px rgba(0, 0, 0, 0.9);
       }
 
-      .glass-window {
+      .ring {
         position: absolute;
-        top: 45px;
         left: 50%;
-        width: 245px;
-        height: 345px;
+        top: 58px;
+        width: 285px;
+        height: 285px;
         transform: translateX(-50%);
-        border-radius: 140px 140px 18px 18px;
-        background:
-          linear-gradient(
-            90deg,
-            transparent 48%,
-            rgba(0, 0, 0, 0.75) 49%,
-            rgba(0, 0, 0, 0.75) 51%,
-            transparent 52%
-          ),
-          linear-gradient(
-            transparent 38%,
-            rgba(0, 0, 0, 0.75) 39%,
-            rgba(0, 0, 0, 0.75) 41%,
-            transparent 42%
-          ),
-          radial-gradient(circle at 50% 28%, #ff2b5b, #9c001f 38%, #250008 75%);
-        border: 9px solid #040001;
+        border-radius: 50%;
+        border: 2px solid rgba(0, 255, 209, 0.6);
         box-shadow:
-          0 0 45px rgba(255, 0, 60, 0.55),
-          inset 0 0 40px rgba(255, 255, 255, 0.08);
+          0 0 32px rgba(0, 255, 209, 0.45),
+          inset 0 0 32px rgba(0, 255, 209, 0.18);
+        animation: rotateRing 14s linear infinite;
       }
 
-      .glass-window::before {
+      .ring::before {
         content: "";
         position: absolute;
-        inset: 22px;
-        border-radius: 120px 120px 12px 12px;
-        border: 2px solid rgba(255, 185, 185, 0.28);
-        box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.45);
+        inset: 42px;
+        border-radius: 50%;
+        border: 1px solid rgba(46, 156, 255, 0.65);
       }
 
-      .glass-window::after {
-        content: "";
+      .ring::after {
+        content: "☉";
         position: absolute;
         inset: 0;
-        background:
-          linear-gradient(
-            45deg,
-            transparent 24%,
-            rgba(255, 255, 255, 0.13) 25%,
-            transparent 27%
-          ),
-          linear-gradient(
-            -45deg,
-            transparent 34%,
-            rgba(255, 255, 255, 0.1) 35%,
-            transparent 37%
-          );
-        opacity: 0.8;
+        display: grid;
+        place-items: center;
+        font-size: 7rem;
+        color: rgba(255, 0, 60, 0.92);
+        text-shadow:
+          0 0 24px rgba(255, 0, 60, 0.9),
+          0 0 35px rgba(0, 255, 209, 0.38);
+      }
+
+      @keyframes rotateRing {
+        from {
+          transform: translateX(-50%) rotate(0deg);
+        }
+        to {
+          transform: translateX(-50%) rotate(360deg);
+        }
+      }
+
+      .mini-eye {
+        position: absolute;
+        width: 58px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 255, 209, 0.55);
+        background: radial-gradient(
+          circle,
+          var(--blood) 0 12%,
+          #020203 16% 38%,
+          transparent 42%
+        );
+        box-shadow: 0 0 18px rgba(0, 255, 209, 0.35);
+        animation: blink 3.5s infinite ease-in-out;
+      }
+
+      .e1 {
+        top: 72px;
+        left: 14%;
+      }
+      .e2 {
+        top: 170px;
+        right: 12%;
+        animation-delay: 1s;
+      }
+      .e3 {
+        bottom: 160px;
+        left: 20%;
+        animation-delay: 2s;
+      }
+      .e4 {
+        bottom: 115px;
+        right: 22%;
+        animation-delay: 1.6s;
+      }
+
+      @keyframes blink {
+        0%,
+        85%,
+        100% {
+          transform: scaleY(1);
+        }
+        90% {
+          transform: scaleY(0.08);
+          opacity: 0.55;
+        }
       }
 
       .altar {
         position: absolute;
         left: 50%;
-        bottom: 64px;
-        width: 300px;
+        bottom: 70px;
+        width: 330px;
         height: 95px;
         transform: translateX(-50%);
-        background: linear-gradient(to bottom, #25000a, #070001);
-        border: 1px solid rgba(255, 0, 60, 0.35);
-        border-radius: 14px 14px 8px 8px;
+        background: linear-gradient(to bottom, #11151c, #030304);
+        border: 1px solid rgba(0, 255, 209, 0.22);
+        border-radius: 14px;
         box-shadow:
-          0 0 30px rgba(255, 0, 60, 0.22),
-          inset 0 0 25px rgba(255, 0, 60, 0.14);
+          0 0 30px rgba(0, 255, 209, 0.12),
+          inset 0 0 25px rgba(255, 0, 60, 0.15);
       }
 
-      .altar::before {
+      .altar::after {
         content: "";
         position: absolute;
-        top: -18px;
-        left: -20px;
-        right: -20px;
-        height: 26px;
-        border-radius: 12px;
-        background: linear-gradient(to bottom, #3a0010, #090001);
-        border: 1px solid rgba(255, 0, 60, 0.35);
-      }
-
-      .chalice {
-        position: absolute;
         left: 50%;
-        bottom: 152px;
-        width: 70px;
-        height: 105px;
+        top: -16px;
+        width: 180px;
+        height: 35px;
         transform: translateX(-50%);
-        z-index: 3;
-      }
-
-      .chalice .cup {
-        position: absolute;
-        top: 0;
-        left: 8px;
-        width: 54px;
-        height: 56px;
-        border-radius: 8px 8px 28px 28px;
-        background: linear-gradient(135deg, #2a000b, #750019, #150005);
-        border: 1px solid rgba(255, 0, 60, 0.55);
-        box-shadow: 0 0 22px rgba(255, 0, 60, 0.42);
-      }
-
-      .chalice .cup::before {
-        content: "";
-        position: absolute;
-        top: 6px;
-        left: 9px;
-        right: 9px;
-        height: 11px;
         border-radius: 50%;
-        background: #ff174d;
-        box-shadow: 0 0 20px rgba(255, 0, 60, 0.9);
-      }
-
-      .chalice .stem {
-        position: absolute;
-        top: 54px;
-        left: 32px;
-        width: 8px;
-        height: 36px;
-        background: #190006;
-        border-left: 1px solid rgba(255, 0, 60, 0.4);
-        border-right: 1px solid rgba(255, 0, 60, 0.4);
-      }
-
-      .chalice .base {
-        position: absolute;
-        bottom: 0;
-        left: 14px;
-        width: 44px;
-        height: 13px;
-        border-radius: 50%;
-        background: #220009;
-        border: 1px solid rgba(255, 0, 60, 0.45);
-      }
-
-      .candle {
-        position: absolute;
-        bottom: 154px;
-        width: 22px;
-        height: 86px;
-        background: linear-gradient(to right, #dbb8b8, #fff1f1, #a57c7c);
-        border-radius: 6px 6px 2px 2px;
-        box-shadow: 0 0 16px rgba(255, 255, 255, 0.2);
-        z-index: 3;
-      }
-
-      .candle.left {
-        left: 22%;
-      }
-      .candle.right {
-        right: 22%;
-      }
-
-      .flame {
-        position: absolute;
-        top: -31px;
-        left: 50%;
-        width: 20px;
-        height: 33px;
-        transform: translateX(-50%);
-        border-radius: 50% 50% 50% 0;
         background: radial-gradient(
           circle,
-          #fff7b0 12%,
-          #ff3c3c 55%,
+          #ff003c,
+          #5d0015 65%,
           transparent 72%
         );
-        box-shadow: 0 0 28px rgba(255, 0, 60, 0.95);
-        animation: flicker 1.2s infinite alternate ease-in-out;
+        box-shadow: 0 0 32px rgba(255, 0, 60, 0.7);
       }
 
-      @keyframes flicker {
-        from {
-          transform: translateX(-50%) rotate(-5deg) scale(0.9);
-          opacity: 0.8;
-        }
-        to {
-          transform: translateX(-50%) rotate(6deg) scale(1.08);
-          opacity: 1;
-        }
-      }
-
-      .glass-rays {
-        position: absolute;
-        inset: 0;
-        background:
-          linear-gradient(
-            112deg,
-            transparent 22%,
-            rgba(255, 0, 60, 0.12) 33%,
-            transparent 48%
-          ),
-          linear-gradient(
-            68deg,
-            transparent 34%,
-            rgba(255, 255, 255, 0.06) 48%,
-            transparent 58%
-          );
-        mix-blend-mode: screen;
-        pointer-events: none;
-      }
-
-      .floor-glow {
-        position: absolute;
-        left: 8%;
-        right: 8%;
-        bottom: 0;
-        height: 150px;
-        background:
-          radial-gradient(
-            ellipse at center,
-            rgba(255, 0, 60, 0.34),
-            transparent 62%
-          ),
-          linear-gradient(to top, #000, transparent);
-        filter: blur(3px);
-      }
-
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-        margin-top: 28px;
-      }
-
-      .stat {
-        padding: 20px;
-        border-radius: 18px;
-        background: rgba(0, 0, 0, 0.45);
-        border: 1px solid rgba(255, 0, 60, 0.18);
-        text-align: center;
-      }
-
-      .stat strong {
-        display: block;
-        color: var(--red);
-        font-size: 1.8rem;
-      }
-
-      .stat span {
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
-
+      .stats,
       .cards,
       .pricing {
         display: grid;
@@ -762,102 +907,71 @@
         gap: 24px;
       }
 
+      .stats {
+        margin-top: 28px;
+        gap: 16px;
+      }
+
+      .stat {
+        text-align: center;
+        padding: 20px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.42);
+        border: 1px solid rgba(0, 255, 209, 0.14);
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 1.8rem;
+        color: var(--green);
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
       .card,
-      .price-card,
-      .castle-item {
-        padding: 34px;
-        border-radius: 28px;
-        background: var(--glass);
-        border: 1px solid var(--border);
-        box-shadow: 0 0 25px rgba(230, 0, 53, 0.1);
-        transition: 0.35s;
+      .district,
+      .price-card {
+        transition: 0.32s;
       }
 
       .card:hover,
-      .price-card:hover,
-      .castle-item:hover {
-        transform: translateY(-8px);
-        border-color: var(--red);
-        box-shadow: 0 0 40px rgba(230, 0, 53, 0.35);
+      .district:hover,
+      .price-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        border-color: rgba(255, 0, 60, 0.45);
+        box-shadow:
+          0 0 34px rgba(255, 0, 60, 0.22),
+          0 0 36px rgba(0, 255, 209, 0.15);
       }
 
       .icon {
-        width: 58px;
-        height: 58px;
+        width: 62px;
+        height: 62px;
         border-radius: 50%;
         display: grid;
         place-items: center;
-        color: white;
-        background: radial-gradient(circle, var(--red), #720019);
-        box-shadow: 0 0 25px rgba(230, 0, 53, 0.55);
         margin-bottom: 22px;
-        font-size: 1.5rem;
+        font-size: 1.7rem;
+        background:
+          radial-gradient(
+            circle at 35% 30%,
+            rgba(0, 255, 209, 0.75),
+            transparent 35%
+          ),
+          linear-gradient(135deg, #001b36, #2a000a);
+        box-shadow:
+          0 0 24px rgba(0, 255, 209, 0.38),
+          0 0 24px rgba(255, 0, 60, 0.22);
       }
 
       .card h3,
-      .price-card h3,
-      .castle-item h3 {
+      .district h3,
+      .price-card h3 {
         color: white;
         font-size: 1.45rem;
         margin-bottom: 14px;
-      }
-
-      .card p,
-      .castle-item p {
-        color: #cfa5a5;
-        line-height: 1.75;
-      }
-
-      .castle-art {
-        min-height: 550px;
-        border-radius: 30px;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid var(--border);
-        background:
-          radial-gradient(
-            circle at 50% 15%,
-            rgba(255, 0, 60, 0.45),
-            transparent 17%
-          ),
-          linear-gradient(to bottom, #170008, #020000);
-        box-shadow: 0 0 42px rgba(230, 0, 53, 0.18);
-      }
-
-      .castle-art .moon {
-        width: 130px;
-        height: 130px;
-        top: 55px;
-      }
-
-      .mountain {
-        position: absolute;
-        bottom: 120px;
-        width: 70%;
-        height: 230px;
-        background: linear-gradient(to bottom, #160007, #030000);
-        clip-path: polygon(50% 0, 100% 100%, 0 100%);
-        opacity: 0.95;
-      }
-
-      .mountain.m1 {
-        left: -15%;
-      }
-      .mountain.m2 {
-        right: -12%;
-        height: 280px;
-        opacity: 0.75;
-      }
-
-      .castle-art .castle-silhouette {
-        bottom: 72px;
-        transform: scale(0.78);
-        transform-origin: bottom center;
-      }
-
-      .castle-list {
-        display: grid;
-        gap: 18px;
       }
 
       .gallery {
@@ -867,10 +981,10 @@
       }
 
       .gallery-card {
-        min-height: 270px;
+        min-height: 285px;
         border-radius: 24px;
-        border: 1px solid var(--border);
-        background: #080003;
+        border: 1px solid rgba(0, 255, 209, 0.18);
+        background: #050608;
         position: relative;
         overflow: hidden;
         transition: 0.3s;
@@ -878,7 +992,9 @@
 
       .gallery-card:hover {
         transform: scale(1.035);
-        box-shadow: 0 0 35px rgba(230, 0, 53, 0.35);
+        box-shadow:
+          0 0 35px rgba(0, 255, 209, 0.2),
+          0 0 35px rgba(255, 0, 60, 0.24);
       }
 
       .gallery-card::after {
@@ -887,190 +1003,170 @@
         left: 18px;
         right: 18px;
         bottom: 18px;
-        color: white;
-        font-size: 1.25rem;
-        text-shadow: 0 0 12px var(--red);
         z-index: 5;
+        color: white;
+        font-size: 1.18rem;
+        text-shadow: 0 0 14px var(--green);
       }
 
-      .label-fade {
+      .fade {
         position: absolute;
         inset: 0;
+        z-index: 4;
         background: linear-gradient(
           to top,
-          rgba(0, 0, 0, 0.88),
+          rgba(0, 0, 0, 0.94),
           transparent 65%
         );
-        z-index: 4;
       }
 
-      .scene-forest {
-        background: linear-gradient(to bottom, #150008, #020000);
+      .scene-eye {
+        background:
+          radial-gradient(
+            circle at 50% 45%,
+            rgba(0, 255, 209, 0.22),
+            transparent 38%
+          ),
+          linear-gradient(to bottom, #05070b, #020203);
       }
 
-      .tree {
+      .eye-symbol {
         position: absolute;
-        bottom: 0;
-        width: 55px;
-        height: 210px;
-        background: #030000;
-        clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        left: 50%;
+        top: 88px;
+        width: 205px;
+        height: 102px;
+        transform: translateX(-50%);
+        border-radius: 50%;
+        border: 3px solid rgba(0, 255, 209, 0.7);
+        box-shadow: 0 0 30px rgba(0, 255, 209, 0.45);
       }
 
-      .tree.t1 {
-        left: 8%;
-        height: 230px;
+      .eye-symbol::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 62px;
+        height: 62px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--blood), #040406 58%);
+        box-shadow: 0 0 28px rgba(255, 0, 60, 0.82);
       }
-      .tree.t2 {
-        left: 27%;
-        height: 185px;
+
+      .scene-teeth {
+        background:
+          radial-gradient(
+            circle at 50% 30%,
+            rgba(255, 0, 60, 0.26),
+            transparent 32%
+          ),
+          linear-gradient(to bottom, #120006, #020203);
       }
-      .tree.t3 {
-        left: 53%;
-        height: 245px;
+
+      .mouth {
+        position: absolute;
+        left: 50%;
+        top: 82px;
+        width: 205px;
+        height: 118px;
+        transform: translateX(-50%);
+        border-radius: 50%;
+        background: #010102;
+        border: 2px solid rgba(255, 0, 60, 0.45);
+        box-shadow: 0 0 34px rgba(255, 0, 60, 0.38);
+        overflow: hidden;
       }
-      .tree.t4 {
-        right: 8%;
+
+      .tooth {
+        position: absolute;
+        top: 0;
+        width: 24px;
+        height: 58px;
+        background: #e8ffff;
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        filter: drop-shadow(0 0 8px rgba(0, 255, 209, 0.45));
+      }
+
+      .tooth:nth-child(1) {
+        left: 32px;
+      }
+      .tooth:nth-child(2) {
+        left: 75px;
+        height: 72px;
+      }
+      .tooth:nth-child(3) {
+        left: 118px;
+        height: 72px;
+      }
+      .tooth:nth-child(4) {
+        right: 32px;
+      }
+
+      .scene-crystal {
+        background:
+          radial-gradient(
+            circle at 50% 42%,
+            rgba(0, 255, 209, 0.24),
+            transparent 34%
+          ),
+          linear-gradient(to bottom, #071018, #020203);
+      }
+
+      .big-crystal {
+        position: absolute;
+        left: 50%;
+        bottom: 38px;
+        width: 92px;
         height: 205px;
-      }
-
-      .moon-small {
-        position: absolute;
-        top: 36px;
-        right: 35px;
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background: var(--red);
-        box-shadow: 0 0 40px var(--red);
-      }
-
-      .scene-gate {
-        background:
-          radial-gradient(
-            circle at 50% 18%,
-            rgba(255, 0, 60, 0.45),
-            transparent 18%
-          ),
-          linear-gradient(to bottom, #190008, #020000);
-      }
-
-      .iron-gate {
-        position: absolute;
-        left: 20%;
-        right: 20%;
-        bottom: 0;
-        height: 210px;
-        border: 4px solid #050000;
-        border-bottom: none;
-        border-radius: 100px 100px 0 0;
-        box-shadow: 0 0 18px rgba(255, 0, 60, 0.35);
-      }
-
-      .iron-gate span {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 5px;
-        background: #050000;
-      }
-
-      .iron-gate span:nth-child(1) {
-        left: 20%;
-      }
-      .iron-gate span:nth-child(2) {
-        left: 40%;
-      }
-      .iron-gate span:nth-child(3) {
-        left: 60%;
-      }
-      .iron-gate span:nth-child(4) {
-        left: 80%;
-      }
-
-      .scene-rose {
-        background: linear-gradient(to bottom, #100005, #020000);
-      }
-
-      .rose {
-        position: absolute;
-        left: 50%;
-        top: 70px;
-        width: 90px;
-        height: 90px;
         transform: translateX(-50%);
-        background: radial-gradient(
-          circle,
-          #ff174d 5%,
-          #a00024 45%,
-          #32000b 70%
+        clip-path: polygon(50% 0, 100% 26%, 78% 100%, 22% 100%, 0 26%);
+        background: linear-gradient(
+          135deg,
+          var(--green),
+          var(--blue),
+          rgba(255, 0, 60, 0.35)
         );
-        border-radius: 50% 45% 50% 45%;
-        box-shadow: 0 0 35px rgba(255, 0, 60, 0.6);
+        box-shadow: 0 0 40px rgba(0, 255, 209, 0.58);
+        animation: crystalPulse 2s infinite alternate;
       }
 
-      .rose::before,
-      .rose::after {
-        content: "";
-        position: absolute;
-        inset: 18px;
-        border-radius: 50%;
-        border: 3px solid rgba(0, 0, 0, 0.28);
-        transform: rotate(28deg);
-      }
-
-      .stem {
-        position: absolute;
-        top: 155px;
-        left: 50%;
-        width: 6px;
-        height: 110px;
-        background: #1e3d16;
-        transform: translateX(-50%);
-      }
-
-      .scene-window {
+      .scene-symbol {
         background:
           radial-gradient(
-            circle at 50% 40%,
-            rgba(255, 0, 60, 0.25),
-            transparent 28%
+            circle at 50% 46%,
+            rgba(46, 156, 255, 0.22),
+            transparent 38%
           ),
-          linear-gradient(to bottom, #120005, #020000);
+          linear-gradient(to bottom, #05070b, #020203);
       }
 
-      .goth-window {
+      .wrong-symbol {
         position: absolute;
-        top: 42px;
+        top: 70px;
         left: 50%;
-        width: 120px;
-        height: 190px;
-        transform: translateX(-50%);
-        border-radius: 70px 70px 8px 8px;
-        background: radial-gradient(circle, #ff003c, #28000b 70%);
-        border: 8px solid #050000;
-        box-shadow: 0 0 32px rgba(255, 0, 60, 0.62);
+        width: 170px;
+        height: 170px;
+        transform: translateX(-50%) rotate(12deg);
+        border: 2px solid rgba(0, 255, 209, 0.6);
+        border-radius: 50%;
+        box-shadow: 0 0 30px rgba(0, 255, 209, 0.35);
+        animation: rotateRing 11s linear infinite;
       }
 
-      .goth-window::before {
+      .wrong-symbol::before,
+      .wrong-symbol::after {
         content: "";
         position: absolute;
-        left: 50%;
-        top: 0;
-        bottom: 0;
-        width: 6px;
-        background: #050000;
-        transform: translateX(-50%);
+        inset: 32px;
+        border: 2px solid rgba(255, 0, 60, 0.65);
+        transform: rotate(45deg);
       }
 
-      .goth-window::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 48%;
-        height: 6px;
-        background: #050000;
+      .wrong-symbol::after {
+        transform: rotate(-45deg);
+        border-color: rgba(46, 156, 255, 0.65);
       }
 
       .price-card {
@@ -1078,27 +1174,27 @@
       }
 
       .price-card.featured {
-        transform: scale(1.04);
-        border-color: var(--red);
-        box-shadow: 0 0 45px rgba(230, 0, 53, 0.35);
+        border-color: rgba(0, 255, 209, 0.45);
+        box-shadow:
+          0 0 38px rgba(0, 255, 209, 0.18),
+          0 0 38px rgba(255, 0, 60, 0.16);
       }
 
       .price {
-        color: var(--red);
+        color: var(--green);
         font-size: 2.8rem;
         margin-bottom: 20px;
-        text-shadow: 0 0 18px rgba(230, 0, 53, 0.6);
+        text-shadow: 0 0 16px rgba(0, 255, 209, 0.75);
       }
 
       .price-card ul {
         list-style: none;
         margin-bottom: 28px;
       }
-
       .price-card li {
+        color: #c8bec3;
         padding: 11px 0;
-        color: #cfaaaa;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
       }
 
       input,
@@ -1107,11 +1203,12 @@
         padding: 15px 17px;
         margin-bottom: 15px;
         border-radius: 14px;
-        border: 1px solid rgba(255, 0, 60, 0.25);
+        border: 1px solid rgba(0, 255, 209, 0.18);
         background: rgba(0, 0, 0, 0.55);
         color: white;
         outline: none;
         font-family: inherit;
+        transition: 0.25s;
       }
 
       textarea {
@@ -1121,45 +1218,70 @@
 
       input:focus,
       textarea:focus {
-        border-color: var(--red);
-        box-shadow: 0 0 18px rgba(230, 0, 53, 0.35);
+        border-color: var(--blood);
+        box-shadow:
+          0 0 22px rgba(255, 0, 60, 0.35),
+          0 0 18px rgba(0, 255, 209, 0.25);
+      }
+
+      .form-eyes {
+        display: none;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      form:focus-within .form-eyes {
+        display: flex;
+      }
+
+      .form-eye {
+        width: 42px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1px solid var(--green);
+        background: radial-gradient(
+          circle,
+          var(--blood) 0 18%,
+          #000 22% 42%,
+          transparent 46%
+        );
+        box-shadow: 0 0 14px rgba(0, 255, 209, 0.35);
+        animation: blink 2.8s infinite;
       }
 
       footer {
         padding: 42px 7%;
         text-align: center;
-        background: #020000;
-        border-top: 1px solid var(--border);
-        color: #9d7070;
+        color: #8e888c;
+        background: #010102;
+        border-top: 1px solid rgba(0, 255, 209, 0.14);
       }
 
       .drip {
         position: fixed;
         top: 0;
+        z-index: 20;
         width: 7px;
-        background: linear-gradient(var(--red), #720019);
+        background: linear-gradient(var(--blood), #530013);
         border-radius: 0 0 20px 20px;
-        box-shadow: 0 0 18px var(--red);
-        z-index: 10;
+        box-shadow: 0 0 18px var(--blood);
         animation: drip 4.5s infinite ease-in-out;
-        opacity: 0.8;
         pointer-events: none;
       }
 
-      .drip.one {
-        left: 13%;
-        height: 95px;
-        animation-delay: 0s;
+      .d1 {
+        left: 12%;
+        height: 92px;
       }
-      .drip.two {
-        left: 74%;
-        height: 125px;
+      .d2 {
+        left: 72%;
+        height: 128px;
         animation-delay: 1.4s;
       }
-      .drip.three {
-        left: 91%;
-        height: 75px;
-        animation-delay: 2.2s;
+      .d3 {
+        left: 90%;
+        height: 82px;
+        animation-delay: 2.1s;
       }
 
       @keyframes drip {
@@ -1169,24 +1291,20 @@
           opacity: 0.35;
         }
         50% {
-          transform: translateY(20px);
+          transform: translateY(18px);
           opacity: 1;
         }
       }
 
       @media (max-width: 1000px) {
         .hero,
-        .about-grid,
-        .castle,
-        .contact-wrapper {
+        .grid-2 {
           grid-template-columns: 1fr;
         }
-
         .cards,
         .pricing {
           grid-template-columns: 1fr 1fr;
         }
-
         .gallery {
           grid-template-columns: 1fr 1fr;
         }
@@ -1196,395 +1314,405 @@
         .menu-btn {
           display: block;
         }
-
         .nav-links {
           position: absolute;
-          top: 72px;
+          top: 76px;
           left: 0;
           width: 100%;
-          background: rgba(0, 0, 0, 0.96);
+          display: none;
           flex-direction: column;
           align-items: center;
           padding: 25px;
-          display: none;
-          border-bottom: 1px solid var(--border);
+          background: rgba(1, 1, 2, 0.97);
+          border-bottom: 1px solid rgba(0, 255, 209, 0.16);
         }
 
         .nav-links.active {
           display: flex;
         }
-
         .hero {
           padding-top: 125px;
         }
-
-        .hero-art {
-          min-height: 500px;
+        .eldritch-art {
+          min-height: 540px;
         }
-
         .cards,
         .pricing,
         .gallery,
         .stats {
           grid-template-columns: 1fr;
         }
-
-        .price-card.featured {
-          transform: none;
-        }
       }
     </style>
   </head>
 
   <body>
-    <div class="mist"></div>
-    <div class="drip one"></div>
-    <div class="drip two"></div>
-    <div class="drip three"></div>
+    <div class="static"></div>
+    <div class="fog"></div>
+    <div class="drip d1"></div>
+    <div class="drip d2"></div>
+    <div class="drip d3"></div>
+
+    <div class="cursor-trail"></div>
+    <div class="whisper" style="top: 22%; left: 6%">do not descend</div>
+    <div class="whisper" style="top: 64%; right: 8%; animation-delay: 2s">
+      it knows your name
+    </div>
+    <div class="whisper" style="bottom: 18%; left: 35%; animation-delay: 4s">
+      the moon blinked
+    </div>
 
     <nav class="navbar">
-      <div class="logo">CRIMSON COVENANT</div>
+      <div class="logo">THE WOUND BENEATH</div>
       <button class="menu-btn" onclick="toggleMenu()">☰</button>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="#home">Home</a></li>
-        <li><a href="#lore">Lore</a></li>
-        <li><a href="#clans">Clans</a></li>
-        <li><a href="#castle">Castle</a></li>
-        <li><a href="#gallery">Gallery</a></li>
-        <li><a href="#contact">Join</a></li>
+        <li><a href="#lore">The Wound</a></li>
+        <li><a href="#orders">Orders</a></li>
+        <li><a href="#districts">Districts</a></li>
+        <li><a href="#visions">Visions</a></li>
+        <li><a href="#join">Descend</a></li>
       </ul>
     </nav>
 
-    <header class="hero" id="home">
+    <header class="hero reveal" id="home">
       <div>
-        <div class="eyebrow">The night is eternal</div>
-        <h1>Rise Beneath The <span>Blood Moon</span></h1>
+        <div class="eyebrow">Do not answer the thing below</div>
+        <h1>The City Is <span>Listening</span></h1>
         <p>
-          Welcome to Crimson Covenant — a gothic vampire realm of ancient
-          castles, forbidden rituals, crimson skies, moonlit forests, and
-          immortal secrets.
+          Beneath the cathedral, beneath the blood, beneath the black stone
+          streets, there is a wound in reality. It dreams in crystal blue. It
+          bleeds red. It opens green eyes in the dark.
         </p>
 
         <div class="hero-buttons">
-          <a href="#contact" class="btn">Request Invitation</a>
-          <a href="#lore" class="btn secondary">Discover the Lore</a>
+          <a href="#join" class="btn red">Descend Anyway</a>
+          <a href="#lore" class="btn">Read the Forbidden Record</a>
         </div>
       </div>
 
-      <div class="hero-art">
-        <div class="moon"></div>
-
-        <div class="bat one">⌁</div>
-        <div class="bat two">⌁</div>
-        <div class="bat three">⌁</div>
-
-        <div class="castle-silhouette">
-          <div class="tower t1"></div>
-          <div class="tower t2"></div>
-          <div class="main-castle">
-            <div class="gate"></div>
-          </div>
-          <div class="tower t3"></div>
-          <div class="tower t4"></div>
+      <div class="eldritch-art parallax-zone">
+        <div class="black-sun parallax" data-speed="24">
+          <div class="pupil"></div>
         </div>
 
-        <div class="red-fog"></div>
+        <div class="tentacle tenta1 parallax" data-speed="-18"></div>
+        <div class="tentacle tenta2 parallax" data-speed="18"></div>
+        <div class="tentacle tenta3 parallax" data-speed="-8"></div>
+
+        <div class="eldritch-city parallax" data-speed="10">
+          <div class="spire s1"></div>
+          <div class="spire s2"></div>
+          <div class="cathedral"><div class="gate"></div></div>
+          <div class="spire s3"></div>
+          <div class="spire s4"></div>
+          <div class="spire s5"></div>
+        </div>
+
+        <div class="crystal c1 parallax" data-speed="-14"></div>
+        <div class="crystal c2 parallax" data-speed="16"></div>
+        <div class="crystal c3 parallax" data-speed="8"></div>
+
+        <div class="ground-fog parallax" data-speed="-6"></div>
 
         <div class="floating-box">
-          <h3>The Eternal Court</h3>
+          <h3>The Choir Under the Floor</h3>
           <p>
-            Every century, the oldest bloodlines gather beneath the crimson
-            eclipse to choose who shall rule the midnight kingdom.
+            It presses thoughts into your bones until your shadow begins to
+            pray.
           </p>
         </div>
       </div>
     </header>
 
-    <section id="lore">
+    <section id="lore" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">Ancient origins</div>
-        <h2>The Lore of <span>Crimson Night</span></h2>
+        <div class="eyebrow">The scripture moves when unread</div>
+        <h2>Lore of the <span>Wound</span></h2>
       </div>
 
-      <div class="about-grid">
-        <div class="stained-glass-art">
-          <div class="glass-rays"></div>
-          <div class="glass-window"></div>
-
-          <div class="candle left">
-            <div class="flame"></div>
-          </div>
-
-          <div class="candle right">
-            <div class="flame"></div>
-          </div>
-
-          <div class="chalice">
-            <div class="cup"></div>
-            <div class="stem"></div>
-            <div class="base"></div>
-          </div>
-
+      <div class="grid-2">
+        <div class="ritual-art">
+          <div class="mini-eye e1"></div>
+          <div class="mini-eye e2"></div>
+          <div class="mini-eye e3"></div>
+          <div class="mini-eye e4"></div>
+          <div class="ring"></div>
           <div class="altar"></div>
-          <div class="floor-glow"></div>
         </div>
 
-        <div class="panel">
-          <h3>A Kingdom Hidden from Dawn</h3>
+        <div class="panel breathing">
+          <h3>A City Built Over Something Alive</h3>
           <p>
-            Long before cities touched the sky, there stood a kingdom wrapped in
-            black stone and red mist. Its people feared the sun, worshipped the
-            moon, and guarded a secret older than memory itself.
+            The blood was not medicine. It was a language. The crystals were not
+            stars. They were teeth.
           </p>
           <p>
-            The Crimson Covenant was formed by seven vampire houses, each sworn
-            to protect the castle, the forest, and the sacred bloodline of the
-            first immortal.
+            Every cure opened another eye. Every bell invited another shape.
           </p>
 
           <div class="stats">
             <div class="stat">
-              <strong>7</strong>
-              <span>Ancient Houses</span>
+              <strong>17</strong><span>Unmarked Graves</span>
             </div>
-            <div class="stat">
-              <strong>900+</strong>
-              <span>Years Hidden</span>
-            </div>
-            <div class="stat">
-              <strong>1</strong>
-              <span>Blood Moon</span>
-            </div>
+            <div class="stat"><strong>9</strong><span>Wrong Moons</span></div>
+            <div class="stat"><strong>∞</strong><span>Eyes Beneath</span></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="clans">
+    <section id="orders" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">Choose your bloodline</div>
-        <h2>Vampire <span>Clans</span></h2>
+        <div class="eyebrow">No order remains clean</div>
+        <h2>Corrupted <span>Orders</span></h2>
       </div>
 
       <div class="cards">
-        <div class="card">
-          <div class="icon">♛</div>
-          <h3>House Nocturne</h3>
-          <p>
-            Noble, cold, and royal. Masters of politics, old money, candlelit
-            halls, and silent manipulation.
-          </p>
+        <div class="card breathing">
+          <div class="icon">☽</div>
+          <h3>Moon-Sick Hunters</h3>
+          <p>They hunt beasts, but hear lullabies from wells.</p>
         </div>
-
-        <div class="card">
-          <div class="icon">☾</div>
-          <h3>House Vesper</h3>
-          <p>
-            Shadow walkers who travel through mist, mirrors, and dreams. They
-            are spies of the vampire world.
-          </p>
-        </div>
-
-        <div class="card">
+        <div class="card breathing">
           <div class="icon">✦</div>
-          <h3>House Sanguis</h3>
-          <p>
-            Fierce warriors of the crimson oath. Known for speed, strength, and
-            terrifying loyalty.
-          </p>
+          <h3>Crystal Choir</h3>
+          <p>Their skulls glow with blue-green insight.</p>
+        </div>
+        <div class="card breathing">
+          <div class="icon">☉</div>
+          <h3>Blood Ministers</h3>
+          <p>They pour red prayers into veins.</p>
         </div>
       </div>
     </section>
 
-    <section id="castle">
+    <section id="districts" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">The forbidden halls</div>
-        <h2>Explore The <span>Castle</span></h2>
+        <div class="eyebrow">The streets bend when observed</div>
+        <h2>Rotten <span>Districts</span></h2>
       </div>
 
-      <div class="castle">
-        <div class="castle-art">
-          <div class="moon"></div>
-          <div class="mountain m1"></div>
-          <div class="mountain m2"></div>
-
-          <div class="castle-silhouette">
-            <div class="tower t1"></div>
-            <div class="tower t2"></div>
-            <div class="main-castle">
-              <div class="gate"></div>
-            </div>
-            <div class="tower t3"></div>
-            <div class="tower t4"></div>
+      <div class="grid-2">
+        <div class="eldritch-art">
+          <div class="black-sun"><div class="pupil"></div></div>
+          <div class="tentacle tenta1"></div>
+          <div class="tentacle tenta2"></div>
+          <div class="eldritch-city">
+            <div class="spire s1"></div>
+            <div class="spire s2"></div>
+            <div class="cathedral"><div class="gate"></div></div>
+            <div class="spire s3"></div>
+            <div class="spire s4"></div>
+            <div class="spire s5"></div>
           </div>
-
-          <div class="red-fog"></div>
+          <div class="crystal c1"></div>
+          <div class="crystal c2"></div>
+          <div class="ground-fog"></div>
         </div>
 
-        <div class="castle-list">
-          <div class="castle-item">
-            <h3>The Blood Hall</h3>
-            <p>
-              A grand chamber glowing with red glass windows, black marble
-              floors, and portraits that watch every visitor.
-            </p>
+        <div style="display: grid; gap: 18px">
+          <div class="district breathing">
+            <h3>The Lantern Ward</h3>
+            <p>Lamps burn green and shadows arrive before their owners.</p>
           </div>
-
-          <div class="castle-item">
-            <h3>The Moon Library</h3>
-            <p>
-              Shelves of cursed books, silver-ink manuscripts, and forbidden
-              maps of lands erased from mortal history.
-            </p>
+          <div class="district breathing">
+            <h3>The Glass Chapel</h3>
+            <p>Blue crystal ribs hum with prayers from buried mouths.</p>
           </div>
-
-          <div class="castle-item">
-            <h3>The Crimson Garden</h3>
-            <p>
-              A garden that blooms only at midnight, filled with black roses and
-              fountains that reflect no living face.
-            </p>
+          <div class="district breathing">
+            <h3>Redwater Canal</h3>
+            <p>It reflects what the moon is afraid of.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="gallery">
+    <section id="visions" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">Scenes from midnight</div>
-        <h2>Dark <span>Gallery</span></h2>
+        <div class="eyebrow">Things seen after too much blood</div>
+        <h2>Forbidden <span>Visions</span></h2>
       </div>
 
       <div class="gallery">
-        <div class="gallery-card scene-forest" data-title="Moonlit Forest">
-          <div class="moon-small"></div>
-          <div class="tree t1"></div>
-          <div class="tree t2"></div>
-          <div class="tree t3"></div>
-          <div class="tree t4"></div>
-          <div class="label-fade"></div>
+        <div class="gallery-card scene-eye" data-title="The Open Eye">
+          <div class="eye-symbol"></div>
+          <div class="fade"></div>
         </div>
-
-        <div class="gallery-card scene-gate" data-title="Iron Blood Gate">
-          <div class="iron-gate">
-            <span></span><span></span><span></span><span></span>
+        <div class="gallery-card scene-teeth" data-title="The Mouth Below">
+          <div class="mouth">
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
           </div>
-          <div class="label-fade"></div>
+          <div class="fade"></div>
         </div>
-
-        <div class="gallery-card scene-rose" data-title="Black Rose Ritual">
-          <div class="rose"></div>
-          <div class="stem"></div>
-          <div class="label-fade"></div>
+        <div class="gallery-card scene-crystal" data-title="Crystal Infection">
+          <div class="big-crystal"></div>
+          <div class="fade"></div>
         </div>
-
-        <div class="gallery-card scene-window" data-title="Crimson Window">
-          <div class="goth-window"></div>
-          <div class="label-fade"></div>
+        <div class="gallery-card scene-symbol" data-title="Wrong Geometry">
+          <div class="wrong-symbol"></div>
+          <div class="fade"></div>
         </div>
       </div>
     </section>
 
-    <section id="invitation">
+    <section id="join" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">Enter the covenant</div>
-        <h2>Invitation <span>Tiers</span></h2>
+        <div class="eyebrow">The bell has selected you</div>
+        <h2>Descend <span>Deeper</span></h2>
       </div>
 
       <div class="pricing">
-        <div class="price-card">
-          <h3>Initiate</h3>
+        <div class="price-card breathing">
+          <h3>Witness</h3>
           <div class="price">Free</div>
           <ul>
-            <li>Access to outer halls</li>
-            <li>Monthly lore letters</li>
-            <li>Basic clan profile</li>
-            <li>Moonlit archive access</li>
+            <li>One lantern</li>
+            <li>One blood vial</li>
+            <li>One whisper</li>
           </ul>
-          <a href="#contact" class="btn secondary">Begin</a>
+          <a href="#contact" class="btn">Begin</a>
         </div>
-
-        <div class="price-card featured">
-          <h3>Noble Blood</h3>
+        <div class="price-card featured breathing">
+          <h3>Marked Hunter</h3>
           <div class="price">$19</div>
           <ul>
-            <li>Full castle access</li>
-            <li>Clan ranking system</li>
-            <li>Exclusive gothic content</li>
-            <li>Crimson badge</li>
+            <li>Crystal blade</li>
+            <li>Forbidden archive</li>
+            <li>Second shadow access</li>
           </ul>
-          <a href="#contact" class="btn">Join Now</a>
+          <a href="#contact" class="btn red">Take the Mark</a>
         </div>
-
-        <div class="price-card">
-          <h3>Ancient One</h3>
+        <div class="price-card breathing">
+          <h3>Elder Witness</h3>
           <div class="price">$49</div>
           <ul>
-            <li>Private lore chambers</li>
-            <li>Custom vampire identity</li>
-            <li>Elite bloodline status</li>
-            <li>Secret event access</li>
+            <li>Communion rite</li>
+            <li>Open-eye vision</li>
+            <li>Name removed from mirrors</li>
           </ul>
-          <a href="#contact" class="btn secondary">Ascend</a>
+          <a href="#contact" class="btn">Ascend</a>
         </div>
       </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">The gates are open</div>
-        <h2>Request Your <span>Invitation</span></h2>
+        <div class="eyebrow">Speak softly; it answers quickly</div>
+        <h2>The <span>Registry</span></h2>
       </div>
 
-      <div class="contact-wrapper">
-        <div class="panel">
-          <h3>Contact the Covenant</h3>
+      <div class="grid-2">
+        <div class="panel breathing">
+          <h3>Leave Your Name Below</h3>
           <p>
-            Send your name into the night. If the blood moon accepts you, the
-            gates of the castle shall open before dawn.
+            The registry is carved into black glass under the cathedral. Names
+            entered here are sometimes seen moving at night.
           </p>
-
-          <p>📍 Blackspire Castle, Northern Mountains</p>
-          <p>✉️ invite@crimsoncovenant.com</p>
-          <p>☾ Open only after midnight</p>
+          <p>📍 Beneath the Glass Chapel</p>
+          <p>✉️ registry@woundbeneath.com</p>
+          <p>☉ Open when the moon blinks</p>
         </div>
 
-        <form class="panel" onsubmit="submitForm(event)">
-          <h3>Invitation Form</h3>
+        <form class="panel breathing" onsubmit="submitForm(event)">
+          <h3>Registry Form</h3>
+
+          <div class="form-eyes">
+            <div class="form-eye"></div>
+            <div class="form-eye"></div>
+            <div class="form-eye"></div>
+          </div>
 
           <input type="text" placeholder="Your Name" required />
-          <input type="email" placeholder="Your Email" required />
-          <input type="text" placeholder="Preferred Clan" />
-          <textarea
-            placeholder="Why do you seek the Crimson Covenant?"
-          ></textarea>
+          <input type="email" placeholder="Email Address" required />
+          <input type="text" placeholder="What followed you here?" />
+          <textarea placeholder="Describe the dream. Do not lie."></textarea>
 
-          <button class="btn" type="submit">Send Request</button>
+          <button class="btn red" type="submit">Submit Name</button>
         </form>
       </div>
     </section>
 
     <footer>
-      <p>© 2026 Crimson Covenant. Designed beneath the Blood Moon.</p>
+      <p>© 2026 The Wound Beneath. It remembers you now.</p>
     </footer>
 
     <script>
-      function toggleMenu() {
-        document.getElementById("navLinks").classList.toggle("active");
-      }
+      const navLinks = document.getElementById("navLinks");
+      const trail = document.querySelector(".cursor-trail");
+      const pupils = document.querySelectorAll(".pupil");
+      const parallaxZone = document.querySelector(".parallax-zone");
+      const parallaxItems = document.querySelectorAll(".parallax");
 
-      function submitForm(event) {
-        event.preventDefault();
-        alert("Your invitation request has been sent into the night.");
-        event.target.reset();
+      function toggleMenu() {
+        navLinks.classList.toggle("active");
       }
 
       document.querySelectorAll(".nav-links a").forEach((link) => {
-        link.addEventListener("click", () => {
-          document.getElementById("navLinks").classList.remove("active");
-        });
+        link.addEventListener("click", () =>
+          navLinks.classList.remove("active"),
+        );
       });
+
+      document.addEventListener("mousemove", (e) => {
+        trail.style.left = e.clientX + "px";
+        trail.style.top = e.clientY + "px";
+
+        pupils.forEach((pupil) => {
+          const rect = pupil.parentElement.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = (e.clientX - cx) / rect.width;
+          const dy = (e.clientY - cy) / rect.height;
+          pupil.style.transform = `translate(calc(-50% + ${dx * 18}px), calc(-50% + ${dy * 10}px))`;
+        });
+
+        if (parallaxZone) {
+          const rect = parallaxZone.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+          parallaxItems.forEach((item) => {
+            const speed = Number(item.dataset.speed || 8);
+            item.style.translate = `${x * speed}px ${y * speed}px`;
+          });
+        }
+      });
+
+      setInterval(
+        () => {
+          document.body.classList.add("glitching");
+          setTimeout(() => document.body.classList.remove("glitching"), 260);
+        },
+        5200 + Math.random() * 3800,
+      );
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.16 },
+      );
+
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => observer.observe(el));
+
+      function submitForm(event) {
+        event.preventDefault();
+        document.body.classList.add("glitching");
+        alert(
+          "Your name has been accepted. Something beneath the city has turned toward you.",
+        );
+        event.target.reset();
+        setTimeout(() => document.body.classList.remove("glitching"), 300);
+      }
     </script>
   </body>
 </html>
