@@ -446,7 +446,9 @@ async function playForbiddenAudio() {
   }
 
   const spokenLines = [
-    "Do not listen.",
+    "Momina .",
+    "Momina .",
+    "Momina .",
     "You opened the wrong file.",
     "It is behind the recording.",
     "Do not close your eyes.",
