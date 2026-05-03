@@ -242,6 +242,10 @@ function startCreepyAudio() {
 
 function stopForbiddenAudio() {
   try {
+    if ("speechSynthesis" in window) {
+      speechSynthesis.cancel();
+    }
+
     if (droneOscillator) droneOscillator.stop();
     if (tremoloOscillator) tremoloOscillator.stop();
     if (noiseNode) noiseNode.stop();
@@ -261,6 +265,15 @@ function playForbiddenAudio() {
   startCreepyAudio();
 
   transcript.innerHTML = "";
+
+  const spokenLines = [
+    "Do not listen.",
+    "You opened the wrong file.",
+    "It is behind the recording.",
+    "Do not close your eyes.",
+    "It knows you are here.",
+    "Run.",
+  ];
 
   let index = 0;
 
@@ -282,6 +295,25 @@ function playForbiddenAudio() {
 
     index++;
   }, 520);
+
+  if ("speechSynthesis" in window) {
+    speechSynthesis.cancel();
+
+    spokenLines.forEach((text, i) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.55;
+      utterance.pitch = 0.35;
+      utterance.volume = 0.85;
+
+      setTimeout(
+        () => {
+          triggerGlitch();
+          speechSynthesis.speak(utterance);
+        },
+        1200 + i * 2100,
+      );
+    });
+  }
 }
 
 if (searchInput) {
