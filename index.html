@@ -1,0 +1,1590 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crimson Covenant</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: Georgia, "Times New Roman", serif;
+        background: #030000;
+        color: #f8dddd;
+        overflow-x: hidden;
+      }
+
+      :root {
+        --red: #e60035;
+        --red2: #ff174d;
+        --blood: #8f001f;
+        --deep: #120004;
+        --black: #030000;
+        --glass: rgba(18, 0, 6, 0.78);
+        --border: rgba(255, 0, 60, 0.28);
+        --muted: #c99b9b;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at 22% 18%,
+            rgba(255, 0, 64, 0.25),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 75% 70%,
+            rgba(150, 0, 35, 0.28),
+            transparent 35%
+          ),
+          linear-gradient(135deg, #020000, #120005 55%, #000);
+        z-index: -4;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px
+          );
+        background-size: 45px 45px;
+        opacity: 0.35;
+        z-index: -3;
+      }
+
+      .mist {
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at 10% 80%,
+            rgba(255, 255, 255, 0.08),
+            transparent 24%
+          ),
+          radial-gradient(
+            circle at 90% 15%,
+            rgba(255, 255, 255, 0.055),
+            transparent 26%
+          );
+        filter: blur(24px);
+        animation: mistMove 10s infinite alternate ease-in-out;
+        pointer-events: none;
+        z-index: -2;
+      }
+
+      @keyframes mistMove {
+        from {
+          transform: translateX(-25px);
+          opacity: 0.45;
+        }
+        to {
+          transform: translateX(25px);
+          opacity: 0.9;
+        }
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+        padding: 20px 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .logo {
+        color: var(--red);
+        font-size: 1.45rem;
+        letter-spacing: 4px;
+        font-weight: bold;
+        text-shadow: 0 0 18px rgba(230, 0, 53, 0.9);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 26px;
+        list-style: none;
+      }
+
+      .nav-links a {
+        color: #f3c2c2;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--red);
+        text-shadow: 0 0 12px var(--red);
+      }
+
+      .menu-btn {
+        display: none;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .hero {
+        min-height: 100vh;
+        padding: 140px 7% 80px;
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 50px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        color: var(--red);
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+        font-size: 0.85rem;
+      }
+
+      h1 {
+        font-size: clamp(3.2rem, 8vw, 7.4rem);
+        line-height: 0.9;
+        text-transform: uppercase;
+        color: white;
+        text-shadow:
+          0 0 16px rgba(230, 0, 53, 0.85),
+          0 0 60px rgba(230, 0, 53, 0.45);
+      }
+
+      h1 span,
+      h2 span {
+        color: var(--red);
+      }
+
+      .hero p {
+        margin-top: 28px;
+        max-width: 670px;
+        color: #d8abab;
+        font-size: 1.15rem;
+        line-height: 1.8;
+      }
+
+      .hero-buttons {
+        margin-top: 38px;
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 15px 30px;
+        border-radius: 999px;
+        text-decoration: none;
+        color: white;
+        border: 1px solid var(--red);
+        background: linear-gradient(135deg, #720019, var(--red));
+        box-shadow: 0 0 28px rgba(230, 0, 53, 0.45);
+        transition: 0.3s;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 45px rgba(230, 0, 53, 0.8);
+      }
+
+      .btn.secondary {
+        background: transparent;
+        color: #ffc4c4;
+      }
+
+      section {
+        padding: 90px 7%;
+        position: relative;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 55px;
+      }
+
+      .section-title h2 {
+        font-size: clamp(2.2rem, 5vw, 4.3rem);
+        color: white;
+        text-shadow: 0 0 22px rgba(230, 0, 53, 0.6);
+      }
+
+      .hero-art {
+        min-height: 610px;
+        border-radius: 36px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background:
+          radial-gradient(
+            circle at 50% 18%,
+            rgba(255, 0, 60, 0.5),
+            transparent 18%
+          ),
+          linear-gradient(to bottom, #130008 0%, #050004 48%, #010000 100%);
+        box-shadow:
+          0 0 60px rgba(230, 0, 53, 0.28),
+          inset 0 0 120px rgba(0, 0, 0, 0.92);
+      }
+
+      .moon {
+        position: absolute;
+        top: 48px;
+        left: 50%;
+        width: 150px;
+        height: 150px;
+        transform: translateX(-50%);
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 35% 35%,
+          #ff8aa0,
+          #dc0032 45%,
+          #6a0018 75%
+        );
+        box-shadow:
+          0 0 50px rgba(255, 0, 60, 0.85),
+          0 0 120px rgba(255, 0, 60, 0.38);
+      }
+
+      .castle-silhouette {
+        position: absolute;
+        left: 8%;
+        right: 8%;
+        bottom: 105px;
+        height: 300px;
+      }
+
+      .tower {
+        position: absolute;
+        bottom: 0;
+        width: 80px;
+        background: linear-gradient(to bottom, #160007, #050000);
+        border: 1px solid rgba(255, 0, 60, 0.18);
+      }
+
+      .tower::before {
+        content: "";
+        position: absolute;
+        top: -55px;
+        left: -10px;
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
+        border-bottom: 58px solid #080003;
+        filter: drop-shadow(0 0 10px rgba(255, 0, 60, 0.25));
+      }
+
+      .tower::after {
+        content: "";
+        position: absolute;
+        top: 70px;
+        left: 28px;
+        width: 24px;
+        height: 48px;
+        border-radius: 20px 20px 2px 2px;
+        background: radial-gradient(circle, #ff003c, #3a000d);
+        box-shadow: 0 0 18px rgba(255, 0, 60, 0.8);
+      }
+
+      .t1 {
+        left: 2%;
+        height: 225px;
+      }
+      .t2 {
+        left: 24%;
+        height: 285px;
+        width: 95px;
+      }
+      .t3 {
+        right: 24%;
+        height: 285px;
+        width: 95px;
+      }
+      .t4 {
+        right: 2%;
+        height: 225px;
+      }
+
+      .main-castle {
+        position: absolute;
+        left: 22%;
+        right: 22%;
+        bottom: 0;
+        height: 210px;
+        background: linear-gradient(to bottom, #190009, #050000);
+        border: 1px solid rgba(255, 0, 60, 0.2);
+        border-radius: 14px 14px 0 0;
+      }
+
+      .main-castle::before,
+      .main-castle::after {
+        content: "";
+        position: absolute;
+        top: 58px;
+        width: 32px;
+        height: 65px;
+        border-radius: 25px 25px 3px 3px;
+        background: radial-gradient(circle, #ff003c, #2a0009);
+        box-shadow: 0 0 18px rgba(255, 0, 60, 0.75);
+      }
+
+      .main-castle::before {
+        left: 28%;
+      }
+      .main-castle::after {
+        right: 28%;
+      }
+
+      .gate {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 78px;
+        height: 112px;
+        transform: translateX(-50%);
+        border-radius: 48px 48px 0 0;
+        background: linear-gradient(to bottom, #28000b, #000);
+        border: 1px solid rgba(255, 0, 60, 0.24);
+        box-shadow: inset 0 0 26px rgba(255, 0, 60, 0.2);
+      }
+
+      .bat {
+        position: absolute;
+        color: #050000;
+        font-size: 34px;
+        text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
+        animation: fly 7s infinite ease-in-out;
+      }
+
+      .bat.one {
+        top: 110px;
+        left: 18%;
+        animation-delay: 0s;
+      }
+      .bat.two {
+        top: 170px;
+        right: 20%;
+        animation-delay: 1.5s;
+        font-size: 28px;
+      }
+      .bat.three {
+        top: 250px;
+        left: 62%;
+        animation-delay: 2.4s;
+        font-size: 24px;
+      }
+
+      @keyframes fly {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-8deg);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-24px) rotate(9deg);
+          opacity: 1;
+        }
+      }
+
+      .red-fog {
+        position: absolute;
+        left: -10%;
+        right: -10%;
+        bottom: 0;
+        height: 170px;
+        background:
+          radial-gradient(
+            circle at 30% 80%,
+            rgba(255, 0, 60, 0.32),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 70% 60%,
+            rgba(180, 0, 38, 0.28),
+            transparent 35%
+          ),
+          linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
+        filter: blur(8px);
+      }
+
+      .floating-box {
+        position: absolute;
+        left: 28px;
+        right: 28px;
+        bottom: 28px;
+        z-index: 5;
+        padding: 26px;
+        border-radius: 24px;
+        background: rgba(0, 0, 0, 0.66);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(10px);
+      }
+
+      .floating-box h3 {
+        color: var(--red);
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+      }
+
+      .floating-box p {
+        color: #e5b9b9;
+        line-height: 1.6;
+      }
+
+      .about-grid,
+      .castle,
+      .contact-wrapper {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 32px;
+        align-items: stretch;
+      }
+
+      .panel {
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: 30px;
+        padding: 36px;
+        box-shadow: 0 0 30px rgba(230, 0, 53, 0.12);
+      }
+
+      .panel h3 {
+        color: var(--red);
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .panel p {
+        color: #d8abab;
+        line-height: 1.85;
+        margin-bottom: 18px;
+      }
+
+      /* IMPROVED LORE GRAPHIC */
+      .stained-glass-art {
+        min-height: 510px;
+        border-radius: 30px;
+        border: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(
+            circle at 50% 20%,
+            rgba(255, 0, 60, 0.35),
+            transparent 24%
+          ),
+          linear-gradient(to bottom, #140007, #030000);
+        box-shadow:
+          0 0 50px rgba(230, 0, 53, 0.22),
+          inset 0 0 90px rgba(0, 0, 0, 0.88);
+      }
+
+      .glass-window {
+        position: absolute;
+        top: 45px;
+        left: 50%;
+        width: 245px;
+        height: 345px;
+        transform: translateX(-50%);
+        border-radius: 140px 140px 18px 18px;
+        background:
+          linear-gradient(
+            90deg,
+            transparent 48%,
+            rgba(0, 0, 0, 0.75) 49%,
+            rgba(0, 0, 0, 0.75) 51%,
+            transparent 52%
+          ),
+          linear-gradient(
+            transparent 38%,
+            rgba(0, 0, 0, 0.75) 39%,
+            rgba(0, 0, 0, 0.75) 41%,
+            transparent 42%
+          ),
+          radial-gradient(circle at 50% 28%, #ff2b5b, #9c001f 38%, #250008 75%);
+        border: 9px solid #040001;
+        box-shadow:
+          0 0 45px rgba(255, 0, 60, 0.55),
+          inset 0 0 40px rgba(255, 255, 255, 0.08);
+      }
+
+      .glass-window::before {
+        content: "";
+        position: absolute;
+        inset: 22px;
+        border-radius: 120px 120px 12px 12px;
+        border: 2px solid rgba(255, 185, 185, 0.28);
+        box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.45);
+      }
+
+      .glass-window::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            45deg,
+            transparent 24%,
+            rgba(255, 255, 255, 0.13) 25%,
+            transparent 27%
+          ),
+          linear-gradient(
+            -45deg,
+            transparent 34%,
+            rgba(255, 255, 255, 0.1) 35%,
+            transparent 37%
+          );
+        opacity: 0.8;
+      }
+
+      .altar {
+        position: absolute;
+        left: 50%;
+        bottom: 64px;
+        width: 300px;
+        height: 95px;
+        transform: translateX(-50%);
+        background: linear-gradient(to bottom, #25000a, #070001);
+        border: 1px solid rgba(255, 0, 60, 0.35);
+        border-radius: 14px 14px 8px 8px;
+        box-shadow:
+          0 0 30px rgba(255, 0, 60, 0.22),
+          inset 0 0 25px rgba(255, 0, 60, 0.14);
+      }
+
+      .altar::before {
+        content: "";
+        position: absolute;
+        top: -18px;
+        left: -20px;
+        right: -20px;
+        height: 26px;
+        border-radius: 12px;
+        background: linear-gradient(to bottom, #3a0010, #090001);
+        border: 1px solid rgba(255, 0, 60, 0.35);
+      }
+
+      .chalice {
+        position: absolute;
+        left: 50%;
+        bottom: 152px;
+        width: 70px;
+        height: 105px;
+        transform: translateX(-50%);
+        z-index: 3;
+      }
+
+      .chalice .cup {
+        position: absolute;
+        top: 0;
+        left: 8px;
+        width: 54px;
+        height: 56px;
+        border-radius: 8px 8px 28px 28px;
+        background: linear-gradient(135deg, #2a000b, #750019, #150005);
+        border: 1px solid rgba(255, 0, 60, 0.55);
+        box-shadow: 0 0 22px rgba(255, 0, 60, 0.42);
+      }
+
+      .chalice .cup::before {
+        content: "";
+        position: absolute;
+        top: 6px;
+        left: 9px;
+        right: 9px;
+        height: 11px;
+        border-radius: 50%;
+        background: #ff174d;
+        box-shadow: 0 0 20px rgba(255, 0, 60, 0.9);
+      }
+
+      .chalice .stem {
+        position: absolute;
+        top: 54px;
+        left: 32px;
+        width: 8px;
+        height: 36px;
+        background: #190006;
+        border-left: 1px solid rgba(255, 0, 60, 0.4);
+        border-right: 1px solid rgba(255, 0, 60, 0.4);
+      }
+
+      .chalice .base {
+        position: absolute;
+        bottom: 0;
+        left: 14px;
+        width: 44px;
+        height: 13px;
+        border-radius: 50%;
+        background: #220009;
+        border: 1px solid rgba(255, 0, 60, 0.45);
+      }
+
+      .candle {
+        position: absolute;
+        bottom: 154px;
+        width: 22px;
+        height: 86px;
+        background: linear-gradient(to right, #dbb8b8, #fff1f1, #a57c7c);
+        border-radius: 6px 6px 2px 2px;
+        box-shadow: 0 0 16px rgba(255, 255, 255, 0.2);
+        z-index: 3;
+      }
+
+      .candle.left {
+        left: 22%;
+      }
+      .candle.right {
+        right: 22%;
+      }
+
+      .flame {
+        position: absolute;
+        top: -31px;
+        left: 50%;
+        width: 20px;
+        height: 33px;
+        transform: translateX(-50%);
+        border-radius: 50% 50% 50% 0;
+        background: radial-gradient(
+          circle,
+          #fff7b0 12%,
+          #ff3c3c 55%,
+          transparent 72%
+        );
+        box-shadow: 0 0 28px rgba(255, 0, 60, 0.95);
+        animation: flicker 1.2s infinite alternate ease-in-out;
+      }
+
+      @keyframes flicker {
+        from {
+          transform: translateX(-50%) rotate(-5deg) scale(0.9);
+          opacity: 0.8;
+        }
+        to {
+          transform: translateX(-50%) rotate(6deg) scale(1.08);
+          opacity: 1;
+        }
+      }
+
+      .glass-rays {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            112deg,
+            transparent 22%,
+            rgba(255, 0, 60, 0.12) 33%,
+            transparent 48%
+          ),
+          linear-gradient(
+            68deg,
+            transparent 34%,
+            rgba(255, 255, 255, 0.06) 48%,
+            transparent 58%
+          );
+        mix-blend-mode: screen;
+        pointer-events: none;
+      }
+
+      .floor-glow {
+        position: absolute;
+        left: 8%;
+        right: 8%;
+        bottom: 0;
+        height: 150px;
+        background:
+          radial-gradient(
+            ellipse at center,
+            rgba(255, 0, 60, 0.34),
+            transparent 62%
+          ),
+          linear-gradient(to top, #000, transparent);
+        filter: blur(3px);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 28px;
+      }
+
+      .stat {
+        padding: 20px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 0, 60, 0.18);
+        text-align: center;
+      }
+
+      .stat strong {
+        display: block;
+        color: var(--red);
+        font-size: 1.8rem;
+      }
+
+      .stat span {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .cards,
+      .pricing {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      .card,
+      .price-card,
+      .castle-item {
+        padding: 34px;
+        border-radius: 28px;
+        background: var(--glass);
+        border: 1px solid var(--border);
+        box-shadow: 0 0 25px rgba(230, 0, 53, 0.1);
+        transition: 0.35s;
+      }
+
+      .card:hover,
+      .price-card:hover,
+      .castle-item:hover {
+        transform: translateY(-8px);
+        border-color: var(--red);
+        box-shadow: 0 0 40px rgba(230, 0, 53, 0.35);
+      }
+
+      .icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: white;
+        background: radial-gradient(circle, var(--red), #720019);
+        box-shadow: 0 0 25px rgba(230, 0, 53, 0.55);
+        margin-bottom: 22px;
+        font-size: 1.5rem;
+      }
+
+      .card h3,
+      .price-card h3,
+      .castle-item h3 {
+        color: white;
+        font-size: 1.45rem;
+        margin-bottom: 14px;
+      }
+
+      .card p,
+      .castle-item p {
+        color: #cfa5a5;
+        line-height: 1.75;
+      }
+
+      .castle-art {
+        min-height: 550px;
+        border-radius: 30px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background:
+          radial-gradient(
+            circle at 50% 15%,
+            rgba(255, 0, 60, 0.45),
+            transparent 17%
+          ),
+          linear-gradient(to bottom, #170008, #020000);
+        box-shadow: 0 0 42px rgba(230, 0, 53, 0.18);
+      }
+
+      .castle-art .moon {
+        width: 130px;
+        height: 130px;
+        top: 55px;
+      }
+
+      .mountain {
+        position: absolute;
+        bottom: 120px;
+        width: 70%;
+        height: 230px;
+        background: linear-gradient(to bottom, #160007, #030000);
+        clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        opacity: 0.95;
+      }
+
+      .mountain.m1 {
+        left: -15%;
+      }
+      .mountain.m2 {
+        right: -12%;
+        height: 280px;
+        opacity: 0.75;
+      }
+
+      .castle-art .castle-silhouette {
+        bottom: 72px;
+        transform: scale(0.78);
+        transform-origin: bottom center;
+      }
+
+      .castle-list {
+        display: grid;
+        gap: 18px;
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+      }
+
+      .gallery-card {
+        min-height: 270px;
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        background: #080003;
+        position: relative;
+        overflow: hidden;
+        transition: 0.3s;
+      }
+
+      .gallery-card:hover {
+        transform: scale(1.035);
+        box-shadow: 0 0 35px rgba(230, 0, 53, 0.35);
+      }
+
+      .gallery-card::after {
+        content: attr(data-title);
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 18px;
+        color: white;
+        font-size: 1.25rem;
+        text-shadow: 0 0 12px var(--red);
+        z-index: 5;
+      }
+
+      .label-fade {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.88),
+          transparent 65%
+        );
+        z-index: 4;
+      }
+
+      .scene-forest {
+        background: linear-gradient(to bottom, #150008, #020000);
+      }
+
+      .tree {
+        position: absolute;
+        bottom: 0;
+        width: 55px;
+        height: 210px;
+        background: #030000;
+        clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      }
+
+      .tree.t1 {
+        left: 8%;
+        height: 230px;
+      }
+      .tree.t2 {
+        left: 27%;
+        height: 185px;
+      }
+      .tree.t3 {
+        left: 53%;
+        height: 245px;
+      }
+      .tree.t4 {
+        right: 8%;
+        height: 205px;
+      }
+
+      .moon-small {
+        position: absolute;
+        top: 36px;
+        right: 35px;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: var(--red);
+        box-shadow: 0 0 40px var(--red);
+      }
+
+      .scene-gate {
+        background:
+          radial-gradient(
+            circle at 50% 18%,
+            rgba(255, 0, 60, 0.45),
+            transparent 18%
+          ),
+          linear-gradient(to bottom, #190008, #020000);
+      }
+
+      .iron-gate {
+        position: absolute;
+        left: 20%;
+        right: 20%;
+        bottom: 0;
+        height: 210px;
+        border: 4px solid #050000;
+        border-bottom: none;
+        border-radius: 100px 100px 0 0;
+        box-shadow: 0 0 18px rgba(255, 0, 60, 0.35);
+      }
+
+      .iron-gate span {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: #050000;
+      }
+
+      .iron-gate span:nth-child(1) {
+        left: 20%;
+      }
+      .iron-gate span:nth-child(2) {
+        left: 40%;
+      }
+      .iron-gate span:nth-child(3) {
+        left: 60%;
+      }
+      .iron-gate span:nth-child(4) {
+        left: 80%;
+      }
+
+      .scene-rose {
+        background: linear-gradient(to bottom, #100005, #020000);
+      }
+
+      .rose {
+        position: absolute;
+        left: 50%;
+        top: 70px;
+        width: 90px;
+        height: 90px;
+        transform: translateX(-50%);
+        background: radial-gradient(
+          circle,
+          #ff174d 5%,
+          #a00024 45%,
+          #32000b 70%
+        );
+        border-radius: 50% 45% 50% 45%;
+        box-shadow: 0 0 35px rgba(255, 0, 60, 0.6);
+      }
+
+      .rose::before,
+      .rose::after {
+        content: "";
+        position: absolute;
+        inset: 18px;
+        border-radius: 50%;
+        border: 3px solid rgba(0, 0, 0, 0.28);
+        transform: rotate(28deg);
+      }
+
+      .stem {
+        position: absolute;
+        top: 155px;
+        left: 50%;
+        width: 6px;
+        height: 110px;
+        background: #1e3d16;
+        transform: translateX(-50%);
+      }
+
+      .scene-window {
+        background:
+          radial-gradient(
+            circle at 50% 40%,
+            rgba(255, 0, 60, 0.25),
+            transparent 28%
+          ),
+          linear-gradient(to bottom, #120005, #020000);
+      }
+
+      .goth-window {
+        position: absolute;
+        top: 42px;
+        left: 50%;
+        width: 120px;
+        height: 190px;
+        transform: translateX(-50%);
+        border-radius: 70px 70px 8px 8px;
+        background: radial-gradient(circle, #ff003c, #28000b 70%);
+        border: 8px solid #050000;
+        box-shadow: 0 0 32px rgba(255, 0, 60, 0.62);
+      }
+
+      .goth-window::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: #050000;
+        transform: translateX(-50%);
+      }
+
+      .goth-window::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 48%;
+        height: 6px;
+        background: #050000;
+      }
+
+      .price-card {
+        text-align: center;
+      }
+
+      .price-card.featured {
+        transform: scale(1.04);
+        border-color: var(--red);
+        box-shadow: 0 0 45px rgba(230, 0, 53, 0.35);
+      }
+
+      .price {
+        color: var(--red);
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+        text-shadow: 0 0 18px rgba(230, 0, 53, 0.6);
+      }
+
+      .price-card ul {
+        list-style: none;
+        margin-bottom: 28px;
+      }
+
+      .price-card li {
+        padding: 11px 0;
+        color: #cfaaaa;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 15px 17px;
+        margin-bottom: 15px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 0, 60, 0.25);
+        background: rgba(0, 0, 0, 0.55);
+        color: white;
+        outline: none;
+        font-family: inherit;
+      }
+
+      textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: var(--red);
+        box-shadow: 0 0 18px rgba(230, 0, 53, 0.35);
+      }
+
+      footer {
+        padding: 42px 7%;
+        text-align: center;
+        background: #020000;
+        border-top: 1px solid var(--border);
+        color: #9d7070;
+      }
+
+      .drip {
+        position: fixed;
+        top: 0;
+        width: 7px;
+        background: linear-gradient(var(--red), #720019);
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 0 18px var(--red);
+        z-index: 10;
+        animation: drip 4.5s infinite ease-in-out;
+        opacity: 0.8;
+        pointer-events: none;
+      }
+
+      .drip.one {
+        left: 13%;
+        height: 95px;
+        animation-delay: 0s;
+      }
+      .drip.two {
+        left: 74%;
+        height: 125px;
+        animation-delay: 1.4s;
+      }
+      .drip.three {
+        left: 91%;
+        height: 75px;
+        animation-delay: 2.2s;
+      }
+
+      @keyframes drip {
+        0%,
+        100% {
+          transform: translateY(-35px);
+          opacity: 0.35;
+        }
+        50% {
+          transform: translateY(20px);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 1000px) {
+        .hero,
+        .about-grid,
+        .castle,
+        .contact-wrapper {
+          grid-template-columns: 1fr;
+        }
+
+        .cards,
+        .pricing {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .gallery {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .menu-btn {
+          display: block;
+        }
+
+        .nav-links {
+          position: absolute;
+          top: 72px;
+          left: 0;
+          width: 100%;
+          background: rgba(0, 0, 0, 0.96);
+          flex-direction: column;
+          align-items: center;
+          padding: 25px;
+          display: none;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .nav-links.active {
+          display: flex;
+        }
+
+        .hero {
+          padding-top: 125px;
+        }
+
+        .hero-art {
+          min-height: 500px;
+        }
+
+        .cards,
+        .pricing,
+        .gallery,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        .price-card.featured {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="mist"></div>
+    <div class="drip one"></div>
+    <div class="drip two"></div>
+    <div class="drip three"></div>
+
+    <nav class="navbar">
+      <div class="logo">CRIMSON COVENANT</div>
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#lore">Lore</a></li>
+        <li><a href="#clans">Clans</a></li>
+        <li><a href="#castle">Castle</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Join</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero" id="home">
+      <div>
+        <div class="eyebrow">The night is eternal</div>
+        <h1>Rise Beneath The <span>Blood Moon</span></h1>
+        <p>
+          Welcome to Crimson Covenant — a gothic vampire realm of ancient
+          castles, forbidden rituals, crimson skies, moonlit forests, and
+          immortal secrets.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#contact" class="btn">Request Invitation</a>
+          <a href="#lore" class="btn secondary">Discover the Lore</a>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="moon"></div>
+
+        <div class="bat one">⌁</div>
+        <div class="bat two">⌁</div>
+        <div class="bat three">⌁</div>
+
+        <div class="castle-silhouette">
+          <div class="tower t1"></div>
+          <div class="tower t2"></div>
+          <div class="main-castle">
+            <div class="gate"></div>
+          </div>
+          <div class="tower t3"></div>
+          <div class="tower t4"></div>
+        </div>
+
+        <div class="red-fog"></div>
+
+        <div class="floating-box">
+          <h3>The Eternal Court</h3>
+          <p>
+            Every century, the oldest bloodlines gather beneath the crimson
+            eclipse to choose who shall rule the midnight kingdom.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <section id="lore">
+      <div class="section-title">
+        <div class="eyebrow">Ancient origins</div>
+        <h2>The Lore of <span>Crimson Night</span></h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="stained-glass-art">
+          <div class="glass-rays"></div>
+          <div class="glass-window"></div>
+
+          <div class="candle left">
+            <div class="flame"></div>
+          </div>
+
+          <div class="candle right">
+            <div class="flame"></div>
+          </div>
+
+          <div class="chalice">
+            <div class="cup"></div>
+            <div class="stem"></div>
+            <div class="base"></div>
+          </div>
+
+          <div class="altar"></div>
+          <div class="floor-glow"></div>
+        </div>
+
+        <div class="panel">
+          <h3>A Kingdom Hidden from Dawn</h3>
+          <p>
+            Long before cities touched the sky, there stood a kingdom wrapped in
+            black stone and red mist. Its people feared the sun, worshipped the
+            moon, and guarded a secret older than memory itself.
+          </p>
+          <p>
+            The Crimson Covenant was formed by seven vampire houses, each sworn
+            to protect the castle, the forest, and the sacred bloodline of the
+            first immortal.
+          </p>
+
+          <div class="stats">
+            <div class="stat">
+              <strong>7</strong>
+              <span>Ancient Houses</span>
+            </div>
+            <div class="stat">
+              <strong>900+</strong>
+              <span>Years Hidden</span>
+            </div>
+            <div class="stat">
+              <strong>1</strong>
+              <span>Blood Moon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="clans">
+      <div class="section-title">
+        <div class="eyebrow">Choose your bloodline</div>
+        <h2>Vampire <span>Clans</span></h2>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="icon">♛</div>
+          <h3>House Nocturne</h3>
+          <p>
+            Noble, cold, and royal. Masters of politics, old money, candlelit
+            halls, and silent manipulation.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="icon">☾</div>
+          <h3>House Vesper</h3>
+          <p>
+            Shadow walkers who travel through mist, mirrors, and dreams. They
+            are spies of the vampire world.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="icon">✦</div>
+          <h3>House Sanguis</h3>
+          <p>
+            Fierce warriors of the crimson oath. Known for speed, strength, and
+            terrifying loyalty.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="castle">
+      <div class="section-title">
+        <div class="eyebrow">The forbidden halls</div>
+        <h2>Explore The <span>Castle</span></h2>
+      </div>
+
+      <div class="castle">
+        <div class="castle-art">
+          <div class="moon"></div>
+          <div class="mountain m1"></div>
+          <div class="mountain m2"></div>
+
+          <div class="castle-silhouette">
+            <div class="tower t1"></div>
+            <div class="tower t2"></div>
+            <div class="main-castle">
+              <div class="gate"></div>
+            </div>
+            <div class="tower t3"></div>
+            <div class="tower t4"></div>
+          </div>
+
+          <div class="red-fog"></div>
+        </div>
+
+        <div class="castle-list">
+          <div class="castle-item">
+            <h3>The Blood Hall</h3>
+            <p>
+              A grand chamber glowing with red glass windows, black marble
+              floors, and portraits that watch every visitor.
+            </p>
+          </div>
+
+          <div class="castle-item">
+            <h3>The Moon Library</h3>
+            <p>
+              Shelves of cursed books, silver-ink manuscripts, and forbidden
+              maps of lands erased from mortal history.
+            </p>
+          </div>
+
+          <div class="castle-item">
+            <h3>The Crimson Garden</h3>
+            <p>
+              A garden that blooms only at midnight, filled with black roses and
+              fountains that reflect no living face.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="section-title">
+        <div class="eyebrow">Scenes from midnight</div>
+        <h2>Dark <span>Gallery</span></h2>
+      </div>
+
+      <div class="gallery">
+        <div class="gallery-card scene-forest" data-title="Moonlit Forest">
+          <div class="moon-small"></div>
+          <div class="tree t1"></div>
+          <div class="tree t2"></div>
+          <div class="tree t3"></div>
+          <div class="tree t4"></div>
+          <div class="label-fade"></div>
+        </div>
+
+        <div class="gallery-card scene-gate" data-title="Iron Blood Gate">
+          <div class="iron-gate">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="label-fade"></div>
+        </div>
+
+        <div class="gallery-card scene-rose" data-title="Black Rose Ritual">
+          <div class="rose"></div>
+          <div class="stem"></div>
+          <div class="label-fade"></div>
+        </div>
+
+        <div class="gallery-card scene-window" data-title="Crimson Window">
+          <div class="goth-window"></div>
+          <div class="label-fade"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="invitation">
+      <div class="section-title">
+        <div class="eyebrow">Enter the covenant</div>
+        <h2>Invitation <span>Tiers</span></h2>
+      </div>
+
+      <div class="pricing">
+        <div class="price-card">
+          <h3>Initiate</h3>
+          <div class="price">Free</div>
+          <ul>
+            <li>Access to outer halls</li>
+            <li>Monthly lore letters</li>
+            <li>Basic clan profile</li>
+            <li>Moonlit archive access</li>
+          </ul>
+          <a href="#contact" class="btn secondary">Begin</a>
+        </div>
+
+        <div class="price-card featured">
+          <h3>Noble Blood</h3>
+          <div class="price">$19</div>
+          <ul>
+            <li>Full castle access</li>
+            <li>Clan ranking system</li>
+            <li>Exclusive gothic content</li>
+            <li>Crimson badge</li>
+          </ul>
+          <a href="#contact" class="btn">Join Now</a>
+        </div>
+
+        <div class="price-card">
+          <h3>Ancient One</h3>
+          <div class="price">$49</div>
+          <ul>
+            <li>Private lore chambers</li>
+            <li>Custom vampire identity</li>
+            <li>Elite bloodline status</li>
+            <li>Secret event access</li>
+          </ul>
+          <a href="#contact" class="btn secondary">Ascend</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-title">
+        <div class="eyebrow">The gates are open</div>
+        <h2>Request Your <span>Invitation</span></h2>
+      </div>
+
+      <div class="contact-wrapper">
+        <div class="panel">
+          <h3>Contact the Covenant</h3>
+          <p>
+            Send your name into the night. If the blood moon accepts you, the
+            gates of the castle shall open before dawn.
+          </p>
+
+          <p>📍 Blackspire Castle, Northern Mountains</p>
+          <p>✉️ invite@crimsoncovenant.com</p>
+          <p>☾ Open only after midnight</p>
+        </div>
+
+        <form class="panel" onsubmit="submitForm(event)">
+          <h3>Invitation Form</h3>
+
+          <input type="text" placeholder="Your Name" required />
+          <input type="email" placeholder="Your Email" required />
+          <input type="text" placeholder="Preferred Clan" />
+          <textarea
+            placeholder="Why do you seek the Crimson Covenant?"
+          ></textarea>
+
+          <button class="btn" type="submit">Send Request</button>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 Crimson Covenant. Designed beneath the Blood Moon.</p>
+    </footer>
+
+    <script>
+      function toggleMenu() {
+        document.getElementById("navLinks").classList.toggle("active");
+      }
+
+      function submitForm(event) {
+        event.preventDefault();
+        alert("Your invitation request has been sent into the night.");
+        event.target.reset();
+      }
+
+      document.querySelectorAll(".nav-links a").forEach((link) => {
+        link.addEventListener("click", () => {
+          document.getElementById("navLinks").classList.remove("active");
+        });
+      });
+    </script>
+  </body>
+</html>
