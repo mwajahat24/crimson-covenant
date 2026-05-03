@@ -285,18 +285,35 @@
         <section id="audio" class="bottom-grid reveal">
           <div class="audio-box dizzy-layer" data-speed="-7">
             <div class="audio-head">
-              <h3>Audio Transcript</h3>
+              <h3>Recovered Tape Analysis</h3>
               <span>LOG_0017</span>
             </div>
 
-            <div class="transcript" id="transcript">
-              <p>[00:00:00] [breathing detected]</p>
-              <p>[00:00:03] [whispering — unintelligible]</p>
+            <div class="tape-analysis">
+              <p><b>Source:</b> Psychiatric Session Tape</p>
+              <p><b>Condition:</b> Damaged / partially corrupted</p>
+              <p><b>Voice Count:</b> 2 confirmed, 1 unidentified</p>
+              <p>
+                <b>Signal Notes:</b> Low-frequency distortion detected beneath
+                speech.
+              </p>
+
+              <div class="analysis-warning">
+                WARNING: Listener reports include nausea, missing time, and
+                auditory persistence.
+              </div>
+
+              <div class="anomaly-list">
+                <span>00:18 — background voice detected</span>
+                <span>00:42 — waveform inversion</span>
+                <span>01:09 — third speaker appears</span>
+                <span>01:31 — recording continues after stop mark</span>
+              </div>
             </div>
           </div>
 
           <div class="player dizzy-layer" data-speed="6">
-            <p>Current Recording: <span>LOG_0017.wav</span></p>
+            <p>Current Recording: <span>The Doctor Original Voice</span></p>
 
             <button class="play-btn" onclick="playForbiddenAudio()">
               ▶ Listen To Recording
@@ -305,16 +322,17 @@
               Stop Recording
             </button>
 
-            <div class="waveform">
+            <audio id="realSessionAudio" preload="auto">
+              <source src="assets/the-doctor.mp3" type="audio/mpeg" />
+            </audio>
+
+            <div class="waveform" id="waveform">
               <span></span><span></span><span></span><span></span><span></span>
               <span></span><span></span><span></span><span></span><span></span>
             </div>
 
             <div class="quality">
-              <p>
-                Audio Quality:
-                <span id="audioStatus">Ready</span>
-              </p>
+              <p>Audio Status: <span id="audioStatus">Ready</span></p>
               <p>Signal: <span class="bars"></span></p>
             </div>
           </div>
