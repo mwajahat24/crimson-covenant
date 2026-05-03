@@ -8,12 +8,26 @@
   </head>
 
   <body>
+    <div class="left-red-hue"></div>
     <div class="hypnotic-bg"></div>
     <div class="fingerprint-bg"></div>
     <div class="grain"></div>
     <div class="scanlines"></div>
     <div class="vignette"></div>
     <div class="cursor-trail"></div>
+
+    <div class="decrypt-screen" id="decryptScreen">
+      <div>
+        <h2>DECRYPTING FILE</h2>
+        <p id="decryptText">Restoring corrupted frames...</p>
+        <div class="decrypt-bar"><span></span></div>
+      </div>
+    </div>
+
+    <div class="breach-alert" id="breachAlert">
+      <h2>UNAUTHORIZED ENTITY DETECTED</h2>
+      <p>Archive connection compromised.</p>
+    </div>
 
     <div class="classified-stamp">CLASSIFIED</div>
 
@@ -93,13 +107,23 @@
             <a href="#evidence" class="btn red">Open Archive</a>
             <a href="#audio" class="btn">Review Audio</a>
           </div>
+
+          <div class="archive-search">
+            <input
+              id="archiveSearch"
+              type="text"
+              placeholder="Search archive: chapel, door, audio, forest..."
+            />
+            <p id="searchStatus">Search index ready. 6 files available.</p>
+          </div>
         </section>
 
         <section id="evidence" class="content-grid reveal">
-          <div class="evidence-grid">
+          <div class="evidence-grid" id="evidenceGrid">
             <article
               class="evidence-card dizzy-layer"
               data-speed="6"
+              data-scene="photo-hallway"
               data-title="EV_0017_CAM7.mp4"
               data-type="Security Footage"
               data-date="07/14/2012"
@@ -119,6 +143,7 @@
             <article
               class="evidence-card dizzy-layer"
               data-speed="-7"
+              data-scene="photo-door"
               data-title="EV_0023_DOOR.jpg"
               data-type="Site Photo"
               data-date="07/16/2012"
@@ -137,6 +162,7 @@
             <article
               class="evidence-card dizzy-layer"
               data-speed="5"
+              data-scene="photo-ritual"
               data-title="EV_0031_RITUAL.jpg"
               data-type="Forensic Photo"
               data-date="07/18/2012"
@@ -158,6 +184,7 @@
             <article
               class="evidence-card dizzy-layer"
               data-speed="-6"
+              data-scene="photo-forest"
               data-title="EV_0042_FOREST.jpg"
               data-type="Drone Footage Stills"
               data-date="07/20/2012"
@@ -177,6 +204,7 @@
             <article
               class="evidence-card dizzy-layer"
               data-speed="8"
+              data-scene="photo-chapel"
               data-title="EV_0055_CHAPEL.jpg"
               data-type="Site Photo"
               data-date="07/22/2012"
@@ -196,6 +224,7 @@
             <article
               class="evidence-card dizzy-layer"
               data-speed="-5"
+              data-scene="photo-tape"
               data-title="EV_0066_AUDIO.jpg"
               data-type="Recovered Media"
               data-date="07/24/2012"
@@ -229,7 +258,11 @@
               <p><b>DATE:</b> <span id="modalDate">07/14/2012</span></p>
               <p><b>TIME:</b> 03:17:42</p>
               <p><b>SOURCE:</b> CAMERA 07 — HALLWAY</p>
-              <p><b>LOCATION:</b> <span class="redacted"></span> FACILITY</p>
+              <p>
+                <b>LOCATION:</b>
+                <span class="redacted reveal-redaction">SUBLEVEL 9</span>
+                FACILITY
+              </p>
               <p><b>STATUS:</b> <span class="danger">CORRUPTED</span></p>
 
               <p class="description" id="modalDesc">
@@ -237,8 +270,12 @@
                 03:17:41. Motion anomaly detected. Further analysis halted.
               </p>
 
-              <div class="black-redaction"></div>
-              <div class="black-redaction short"></div>
+              <div class="black-redaction reveal-redaction">
+                ENTITY WAS ALREADY INSIDE
+              </div>
+              <div class="black-redaction short reveal-redaction">
+                DO NOT OPEN FRAME 317
+              </div>
 
               <p class="signed">// AUTHORIZED PERSONNEL ONLY</p>
             </div>
@@ -263,6 +300,9 @@
 
             <button class="play-btn" onclick="playForbiddenAudio()">
               ● DO NOT PLAY
+            </button>
+            <button class="btn" onclick="stopForbiddenAudio()">
+              Stop Audio
             </button>
 
             <div class="waveform">
@@ -294,6 +334,38 @@
           </div>
         </section>
 
+        <section class="timeline reveal">
+          <h3>Case Timeline</h3>
+
+          <div class="timeline-item">
+            <span>02:13 AM</span>
+            <p>Camera distortion begins near sealed basement hallway.</p>
+          </div>
+
+          <div class="timeline-item">
+            <span>02:17 AM</span>
+            <p>
+              Unidentified figure appears in frame. No door movement detected.
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <span>02:19 AM</span>
+            <p>
+              Audio recovered from empty room. Breath pattern does not match
+              human lungs.
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <span>02:23 AM</span>
+            <p>
+              Archive records edited themselves. Operator removed from personnel
+              database.
+            </p>
+          </div>
+        </section>
+
         <section id="reports" class="report reveal dizzy-layer" data-speed="-5">
           <h3>Recovered Report Fragment</h3>
           <p>
@@ -302,8 +374,12 @@
             last door had my name on it.”
           </p>
 
-          <div class="black-redaction"></div>
-          <div class="black-redaction medium"></div>
+          <div class="black-redaction reveal-redaction">
+            THE VOICE USED MY MOTHER'S NAME
+          </div>
+          <div class="black-redaction medium reveal-redaction">
+            THE DOOR WAS BREATHING
+          </div>
         </section>
 
         <section id="registry" class="registry reveal">
@@ -329,14 +405,28 @@
       </main>
     </div>
 
+    <nav class="mobile-nav">
+      <a href="#evidence">Evidence</a>
+      <a href="#audio">Audio</a>
+      <a href="#cases">Cases</a>
+      <a href="#registry">Report</a>
+    </nav>
+
     <div class="modal" id="evidenceModal">
       <div class="modal-content">
         <button class="modal-close" onclick="closeModal()">×</button>
+
+        <div class="modal-photo" id="modalPhoto"></div>
+
         <h3 id="modalTitle">Evidence File</h3>
         <p id="modalType">Security Footage</p>
         <p id="modalDateLarge">07/14/2012</p>
         <p id="modalLargeDesc">Description</p>
-        <div class="modal-redacted"></div>
+
+        <div class="modal-redacted reveal-redaction">
+          ANALYSIS FAILED: SUBJECT LOOKED BACK
+        </div>
+
         <button class="btn red" onclick="triggerGlitch()">Run Analysis</button>
       </div>
     </div>
