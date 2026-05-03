@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Black Archive</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=12" />
   </head>
 
   <body>
@@ -299,10 +299,10 @@
             <p>Current Recording: <span>LOG_0017.wav</span></p>
 
             <button class="play-btn" onclick="playForbiddenAudio()">
-              ● DO NOT PLAY
+              ▶ Listen To Recording
             </button>
             <button class="btn" onclick="stopForbiddenAudio()">
-              Stop Audio
+              Stop Recording
             </button>
 
             <div class="waveform">
@@ -311,7 +311,10 @@
             </div>
 
             <div class="quality">
-              <p>Audio Quality: <span>Poor</span></p>
+              <p>
+                Audio Quality:
+                <span id="audioStatus">Ready</span>
+              </p>
               <p>Signal: <span class="bars"></span></p>
             </div>
           </div>
@@ -431,7 +434,7 @@
       </div>
     </div>
 
-    <script src="https://unpkg.com/tone@latest/build/Tone.js"></script>
-    <script src="script.js?v=5"></script>
+    <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
+    <script src="script.js?v=12"></script>
   </body>
 </html>
