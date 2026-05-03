@@ -260,9 +260,133 @@ function stopForbiddenAudio() {
   audioContext = null;
 }
 
-function playForbiddenAudio() {
+async function playDemonicToneLayer() {
+  if (typeof Tone === "undefined") {
+    console.warn("Tone.js is not loaded.");
+    return;
+  }
+
+  await Tone.start();
+
+  const distortion = new Tone.Distortion(0.85);
+  const pitchShift = new Tone.PitchShift(-12);
+  const reverb = new Tone.Reverb({
+    decay: 7,
+    wet: 0.55,
+  });
+
+  const delay = new Tone.FeedbackDelay({
+    delayTime: 0.22,
+    feedback: 0.45,
+    wet: 0.35,
+  });
+
+  const filter = new Tone.Filter({
+    frequency: 650,
+    type: "lowpass",
+    rolloff: -24,
+  });
+
+  const synth = new Tone.MonoSynth({
+    oscillator: {
+      type: "sawtooth",
+    },
+    envelope: {
+      attack: 0.25,
+      decay: 0.4,
+      sustain: 0.35,
+      release: 1.8,
+    },
+    filterEnvelope: {
+      attack: 0.1,
+      decay: 0.3,
+      sustain: 0.2,
+      release: 1,
+    },
+  });
+
+  synth.chain(distortion, pitchShift, delay, reverb, filter, Tone.Destination);
+
+  const now = Tone.now();
+
+  synth.triggerAttackRelease("C2", "1n", now);
+  synth.triggerAttackRelease("G1", "1n", now + 0.45);
+  synth.triggerAttackRelease("F1", "1n", now + 0.9);
+  synth.triggerAttackRelease("C1", "1n", now + 1.35);
+}
+
+function playWhisperBurst() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  const bufferSize = audioContext.sampleRate * 0.8;
+  const buffer = audioContext.createBuffer(
+    1,
+    bufferSize,
+    audioContext.sampleRate,
+  );
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * 0.08;
+  }
+
+  const source = audioContext.createBufferSource();
+  source.buffer = buffer;
+
+  const filter = audioContext.createBiquadFilter();
+  filter.type = "bandpass";
+  filter.frequency.value = 900;
+  filter.Q.value = 4;
+
+  const gain = audioContext.createGain();
+  gain.gain.setValueAtTime(0.001, audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.08, audioContext.currentTime + 0.08);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    audioContext.currentTime + 0.75,
+  );
+
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioContext.destination);
+
+  source.start();
+}
+
+function speakDemonicLine(text, delay = 0) {
+  if (!("speechSynthesis" in window)) return;
+
+  setTimeout(() => {
+    const main = new SpeechSynthesisUtterance(text);
+    main.rate = 0.48;
+    main.pitch = 0.18;
+    main.volume = 0.45;
+
+    const echo = new SpeechSynthesisUtterance(text);
+    echo.rate = 0.36;
+    echo.pitch = 0.05;
+    echo.volume = 0.22;
+
+    triggerGlitch();
+    playWhisperBurst();
+    speechSynthesis.speak(main);
+
+    setTimeout(() => {
+      playWhisperBurst();
+      speechSynthesis.speak(echo);
+    }, 280);
+  }, delay);
+}
+
+async function playForbiddenAudio() {
   triggerGlitch();
   startCreepyAudio();
+
+  if ("speechSynthesis" in window) {
+    speechSynthesis.cancel();
+  }
 
   transcript.innerHTML = "";
 
@@ -274,6 +398,74 @@ function playForbiddenAudio() {
     "It knows you are here.",
     "Run.",
   ];
+
+  // Tone.js demonic layer
+  async function playDemonicToneLayer() {
+    if (typeof Tone === "undefined") return;
+
+    await Tone.start();
+
+    const distortion = new Tone.Distortion(0.85);
+    const pitchShift = new Tone.PitchShift(-12);
+
+    const reverb = new Tone.Reverb({
+      decay: 8,
+      wet: 0.55,
+    });
+
+    const delay = new Tone.FeedbackDelay({
+      delayTime: 0.22,
+      feedback: 0.42,
+      wet: 0.35,
+    });
+
+    const filter = new Tone.Filter({
+      frequency: 600,
+      type: "lowpass",
+      rolloff: -24,
+    });
+
+    const synth = new Tone.MonoSynth({
+      oscillator: {
+        type: "sawtooth",
+      },
+      envelope: {
+        attack: 0.25,
+        decay: 0.4,
+        sustain: 0.35,
+        release: 1.8,
+      },
+    });
+
+    synth.chain(
+      distortion,
+      pitchShift,
+      delay,
+      reverb,
+      filter,
+      Tone.Destination,
+    );
+
+    const now = Tone.now();
+
+    synth.triggerAttackRelease("C2", "1n", now);
+    synth.triggerAttackRelease("G1", "1n", now + 0.35);
+    synth.triggerAttackRelease("F1", "1n", now + 0.7);
+    synth.triggerAttackRelease("C1", "1n", now + 1.1);
+
+    setTimeout(() => {
+      synth.dispose();
+      distortion.dispose();
+      pitchShift.dispose();
+      reverb.dispose();
+      delay.dispose();
+      filter.dispose();
+    }, 5000);
+  }
+
+  spokenLines.forEach((line, index) => {
+    speakDemonicLine(line, 1200 + index * 2300);
+  });
 
   let index = 0;
 
@@ -288,6 +480,20 @@ function playForbiddenAudio() {
 
     if (line.textContent.includes("VOICE")) {
       line.classList.add("voice");
+
+      playWhisperBurst();
+      playDemonicToneLayer();
+      triggerGlitch();
+
+      document.body.style.filter = `
+        contrast(1.08)
+        brightness(1.04)
+        saturate(1.1)
+      `;
+
+      setTimeout(() => {
+        document.body.style.filter = "";
+      }, 900);
     }
 
     transcript.appendChild(line);
@@ -295,25 +501,6 @@ function playForbiddenAudio() {
 
     index++;
   }, 520);
-
-  if ("speechSynthesis" in window) {
-    speechSynthesis.cancel();
-
-    spokenLines.forEach((text, i) => {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.55;
-      utterance.pitch = 0.35;
-      utterance.volume = 0.85;
-
-      setTimeout(
-        () => {
-          triggerGlitch();
-          speechSynthesis.speak(utterance);
-        },
-        1200 + i * 2100,
-      );
-    });
-  }
 }
 
 if (searchInput) {
