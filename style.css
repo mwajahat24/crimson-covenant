@@ -44,6 +44,18 @@ body {
   overflow-x: hidden;
 }
 
+.left-red-hue {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 42vw;
+  z-index: -6;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 0 45%, rgba(255, 59, 49, 0.38), transparent 55%),
+    linear-gradient(to right, rgba(90, 0, 0, 0.48), transparent);
+  filter: blur(18px);
+}
+
 body.glitching {
   animation: hardGlitch 0.28s steps(2) 3;
 }
@@ -507,11 +519,25 @@ body.glitching {
   font-size: 1.02rem;
 }
 
-.hero-buttons {
+.hero-buttons,
+.archive-search {
   margin-top: 26px;
+}
+
+.hero-buttons {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
+}
+
+.archive-search input {
+  max-width: 560px;
+}
+
+.archive-search p {
+  margin-top: 8px;
+  color: var(--green-strong);
+  font-size: 0.9rem;
 }
 
 .btn {
@@ -562,6 +588,10 @@ body.glitching {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
   min-width: 0;
   animation: cardDizzy 6s infinite alternate ease-in-out;
+}
+
+.evidence-card.hidden {
+  display: none;
 }
 
 @keyframes cardDizzy {
@@ -1005,13 +1035,25 @@ body.glitching {
   height: 20px;
   width: 150px;
   background: #050505;
+  color: transparent;
   vertical-align: middle;
+  overflow: hidden;
+  transition: 0.25s;
+}
+
+.reveal-redaction:hover,
+.reveal-redaction:focus {
+  color: #ff3b31;
+  background: #140202;
+  text-shadow: 0 0 10px rgba(255, 59, 49, 0.8);
 }
 
 .black-redaction {
   display: block;
   width: 100%;
   margin-top: 18px;
+  padding-left: 8px;
+  line-height: 20px;
 }
 
 .black-redaction.short {
@@ -1037,7 +1079,8 @@ body.glitching {
 .player,
 .report,
 .registry form,
-.case-mini {
+.case-mini,
+.timeline {
   background: var(--panel);
   border: 1px solid rgba(216, 205, 184, 0.26);
   padding: 26px;
@@ -1056,6 +1099,7 @@ body.glitching {
 .transcript {
   min-height: 230px;
   font-size: 0.9rem;
+  overflow: auto;
 }
 
 .transcript p {
@@ -1158,6 +1202,31 @@ body.glitching {
   color: #eee1cd;
 }
 
+.timeline {
+  margin-top: 38px;
+}
+
+.timeline h3 {
+  color: var(--blood-bright);
+  margin-bottom: 22px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 18px;
+  padding: 16px 0;
+  border-top: 1px solid rgba(216, 205, 184, 0.2);
+}
+
+.timeline-item span {
+  color: var(--green-strong);
+}
+
+.timeline-item p {
+  line-height: 1.6;
+}
+
 .report {
   margin-top: 38px;
   background: var(--paper);
@@ -1203,6 +1272,81 @@ textarea:focus {
   box-shadow: 0 0 24px rgba(255, 59, 49, 0.45);
 }
 
+.decrypt-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: none;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.88);
+  color: var(--green-strong);
+  text-align: center;
+}
+
+.decrypt-screen.active {
+  display: grid;
+}
+
+.decrypt-screen h2 {
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+}
+
+.decrypt-bar {
+  width: min(420px, 80vw);
+  height: 12px;
+  border: 1px solid rgba(213, 255, 233, 0.6);
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.decrypt-bar span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--blood-bright), var(--green-strong));
+  animation: decryptLoad 0.9s linear;
+}
+
+@keyframes decryptLoad {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.breach-alert {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  display: none;
+  place-items: center;
+  background: rgba(80, 0, 0, 0.75);
+  text-align: center;
+  color: white;
+  pointer-events: none;
+}
+
+.breach-alert.active {
+  display: grid;
+  animation: breachPulse 0.8s steps(2) 4;
+}
+
+.breach-alert h2 {
+  font-size: clamp(2rem, 7vw, 5rem);
+  color: white;
+  text-shadow: 0 0 30px var(--blood-bright);
+}
+
+@keyframes breachPulse {
+  50% {
+    filter: invert(1);
+    transform: skewX(3deg);
+  }
+}
+
 .modal {
   position: fixed;
   inset: 0;
@@ -1218,14 +1362,26 @@ textarea:focus {
 }
 
 .modal-content {
-  width: min(680px, 92vw);
+  width: min(760px, 92vw);
   background: var(--paper);
   color: #111;
-  padding: 36px;
+  padding: 28px;
   position: relative;
   box-shadow: 0 0 80px rgba(0, 0, 0, 0.75);
   max-height: 90vh;
   overflow-y: auto;
+}
+
+.modal-photo {
+  height: 310px;
+  margin-bottom: 22px;
+  border: 2px solid #111;
+  overflow: hidden;
+  position: relative;
+}
+
+.modal-photo .photo {
+  height: 100%;
 }
 
 .modal-content h3 {
@@ -1249,12 +1405,14 @@ textarea:focus {
   width: 34px;
   height: 34px;
   cursor: pointer;
+  z-index: 3;
 }
 
 .modal-redacted {
   height: 28px;
   background: #050505;
   margin: 22px 0;
+  color: transparent;
 }
 
 footer {
@@ -1265,6 +1423,10 @@ footer {
   border-top: 1px solid rgba(216, 205, 184, 0.18);
   margin-top: 60px;
   margin-bottom: 0;
+}
+
+.mobile-nav {
+  display: none;
 }
 
 @media (max-width: 1200px) {
@@ -1345,6 +1507,31 @@ footer {
   .w5 {
     display: none;
   }
+
+  .mobile-nav {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    z-index: 1500;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: rgba(10, 10, 10, 0.92);
+    border: 1px solid rgba(216, 205, 184, 0.3);
+    backdrop-filter: blur(12px);
+  }
+
+  .mobile-nav a {
+    color: #fff3df;
+    text-align: center;
+    text-decoration: none;
+    padding: 12px 6px;
+    font-size: 0.78rem;
+  }
+
+  footer {
+    padding-bottom: 82px;
+  }
 }
 
 @media (max-width: 620px) {
@@ -1394,8 +1581,14 @@ footer {
   .player,
   .report,
   .registry form,
-  .case-mini {
+  .case-mini,
+  .timeline {
     padding: 20px;
+  }
+
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 6px;
   }
 
   .waveform {
@@ -1404,5 +1597,9 @@ footer {
 
   .cursor-trail {
     display: none;
+  }
+
+  .modal-photo {
+    height: 240px;
   }
 }
