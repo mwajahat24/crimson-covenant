@@ -22,26 +22,44 @@ const decryptScreen = document.getElementById("decryptScreen");
 const decryptText = document.getElementById("decryptText");
 const breachAlert = document.getElementById("breachAlert");
 const audioStatus = document.getElementById("audioStatus");
+const realSessionAudio = document.getElementById("realSessionAudio");
+const waveform = document.getElementById("waveform");
 
 const transcriptLines = [
-  "[00:00:00] [breathing detected]",
-  "[00:00:03] [whispering — unintelligible]",
-  "[00:00:07] VOICE: ...behind you...",
-  "[00:00:11] [static surge]",
-  "[00:00:14] VOICE: ...do not close your eyes...",
-  "[00:00:18] [breathing intensifies]",
-  "[00:00:22] VOICE: ...it knows you are here...",
-  "[00:00:27] [sound of something moving]",
-  "[00:00:31] [audio corrupted]",
-  "[00:00:35] VOICE: ...run...",
-  "[00:00:37] [END OF RECORDING]",
+  "[00:00:00] [tape begins]",
+  "[00:00:03] DOCTOR: State your name for the recording.",
+  "[00:00:07] PATIENT: I do not think I should say it.",
+  "[00:00:12] DOCTOR: Why not?",
+  "[00:00:15] PATIENT: Because it answers when I do.",
+  "[00:00:21] [chair movement]",
+  "[00:00:24] DOCTOR: Who answers?",
+  "[00:00:28] PATIENT: The thing standing behind you.",
+  "[00:00:34] [static interference]",
+  "[00:00:38] DOCTOR: There is no one behind me.",
+  "[00:00:42] PATIENT: Do not turn around.",
+  "[00:00:48] DOCTOR: Why?",
+  "[00:00:51] PATIENT: Because it is wearing your face now.",
+  "[00:00:58] [doctor breathing becomes audible]",
+  "[00:01:03] DOCTOR: This session is over.",
+  "[00:01:07] PATIENT: It said you would say that.",
+  "[00:01:12] [second voice detected]",
+  "[00:01:16] UNKNOWN: Continue the session.",
+  "[00:01:22] [END OF RECORDING]",
 ];
 
 const voiceLineMap = {
-  "[00:00:07] VOICE: ...behind you...": "Behind you.",
-  "[00:00:14] VOICE: ...do not close your eyes...": "Do not close your eyes.",
-  "[00:00:22] VOICE: ...it knows you are here...": "It knows you are here.",
-  "[00:00:35] VOICE: ...run...": "Run.",
+  "[00:00:07] PATIENT: I do not think I should say it.":
+    "I do not think I should say it.",
+  "[00:00:15] PATIENT: Because it answers when I do.":
+    "Because it answers when I do.",
+  "[00:00:28] PATIENT: The thing standing behind you.":
+    "The thing standing behind you.",
+  "[00:00:42] PATIENT: Do not turn around.": "Do not turn around.",
+  "[00:00:51] PATIENT: Because it is wearing your face now.":
+    "Because it is wearing your face now.",
+  "[00:01:07] PATIENT: It said you would say that.":
+    "It said you would say that.",
+  "[00:01:16] UNKNOWN: Continue the session.": "Continue the session.",
 };
 
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
@@ -315,6 +333,15 @@ function stopForbiddenAudio(closeContext = true) {
   speechTimeouts.forEach(clearTimeout);
   speechTimeouts = [];
 
+  if (realSessionAudio) {
+    realSessionAudio.pause();
+    realSessionAudio.currentTime = 0;
+  }
+
+  if (waveform) {
+    waveform.classList.remove("active");
+  }
+
   if (transcriptInterval) {
     clearInterval(transcriptInterval);
     transcriptInterval = null;
@@ -494,43 +521,40 @@ async function playForbiddenAudio() {
   triggerGlitch();
   startCreepyAudio();
 
-  if (transcript) {
-    transcript.innerHTML = "";
+  if (realSessionAudio) {
+    realSessionAudio.currentTime = 0;
+    realSessionAudio.volume = 0.95;
+
+    realSessionAudio
+      .play()
+      .then(() => {
+        if (audioStatus) audioStatus.textContent = "Playing recovered session";
+        if (waveform) waveform.classList.add("active");
+      })
+      .catch((error) => {
+        console.error("MP3 playback failed:", error);
+        if (audioStatus) audioStatus.textContent = "Playback blocked";
+      });
+
+    realSessionAudio.onended = () => {
+      stopForbiddenAudio();
+      if (audioStatus) audioStatus.textContent = "Recording ended";
+    };
   }
 
-  let index = 0;
+  playDemonicToneLayer();
 
-  transcriptInterval = setInterval(() => {
-    if (index >= transcriptLines.length) {
-      clearInterval(transcriptInterval);
-      transcriptInterval = null;
-      return;
-    }
+  const glitchMoments = [4000, 12000, 21000, 31000, 45000];
 
-    const lineText = transcriptLines[index];
-    const line = document.createElement("p");
-    line.textContent = lineText;
-
-    if (lineText.includes("VOICE")) {
-      line.classList.add("voice");
-      speakDemonicLine(voiceLineMap[lineText] || "Do not listen.");
+  glitchMoments.forEach((time) => {
+    const id = setTimeout(() => {
       triggerGlitch();
+      playWhisperBurst();
+      playDemonicToneLayer();
+    }, time);
 
-      document.body.style.filter =
-        "contrast(1.08) brightness(1.04) saturate(1.1)";
-
-      setTimeout(() => {
-        document.body.style.filter = "";
-      }, 900);
-    }
-
-    if (transcript) {
-      transcript.appendChild(line);
-      transcript.scrollTop = transcript.scrollHeight;
-    }
-
-    index++;
-  }, 900);
+    speechTimeouts.push(id);
+  });
 }
 
 if (searchInput) {
