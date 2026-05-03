@@ -8,6 +8,8 @@
   </head>
 
   <body>
+    <div class="hypnotic-bg"></div>
+    <div class="fingerprint-bg"></div>
     <div class="grain"></div>
     <div class="scanlines"></div>
     <div class="vignette"></div>
@@ -15,268 +17,329 @@
 
     <div class="classified-stamp">CLASSIFIED</div>
 
-    <div class="whisper" style="top: 18%; left: 5%">file corrupted</div>
-    <div class="whisper" style="top: 56%; right: 7%; animation-delay: 2s">
+    <div class="whisper w1 motion-text" data-speed="-7">file corrupted</div>
+    <div class="whisper w2 motion-text" data-speed="8">
       subject still breathing
     </div>
-    <div class="whisper" style="bottom: 16%; left: 34%; animation-delay: 4s">
+    <div class="whisper w3 motion-text" data-speed="-6">
       do not replay audio
     </div>
+    <div class="whisper w4 motion-text" data-speed="7">
+      there is another listener
+    </div>
+    <div class="whisper w5 motion-text" data-speed="-8">
+      your reflection moved first
+    </div>
 
-    <nav class="navbar">
-      <div class="logo">THE BLACK ARCHIVE</div>
-
-      <button class="menu-btn" onclick="toggleMenu()">☰</button>
-
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#home">Index</a></li>
-        <li><a href="#cases">Case Files</a></li>
-        <li><a href="#evidence">Evidence</a></li>
-        <li><a href="#reports">Reports</a></li>
-        <li><a href="#registry">Registry</a></li>
-      </ul>
-    </nav>
-
-    <header class="hero reveal" id="home">
-      <div class="hero-copy">
-        <div class="eyebrow">Restricted access / clearance level 7</div>
-
-        <h1>The Black <span>Archive</span></h1>
-
-        <p>
-          A classified occult investigation database containing corrupted case
-          files, redacted witness reports, CCTV stills, ritual photographs, and
-          recovered recordings that should not be played twice.
+    <div class="layout">
+      <aside class="sidebar dizzy-layer" data-speed="-8">
+        <h1 class="motion-text" data-speed="6">
+          THE <span>BLACK</span> ARCHIVE
+        </h1>
+        <p class="subtitle">
+          Repository of forbidden recordings and documents.
         </p>
 
-        <div class="hero-buttons">
-          <a href="#cases" class="btn red">Open Case Index</a>
-          <a href="#evidence" class="btn">Review Evidence</a>
+        <nav>
+          <a href="#evidence">Evidence</a>
+          <a href="#audio">Audio Logs</a>
+          <a href="#reports">Documents</a>
+          <a href="#cases">Case Files</a>
+          <a href="#registry">Redacted</a>
+        </nav>
+
+        <div class="status-panel">
+          <p><span>System Status</span>Unstable</p>
+          <p><span>Connection</span>Intermittent</p>
+          <p><span>Archive Node</span>TB-A7X</p>
         </div>
 
-        <div class="terminal-box">
-          <p>> ACCESS NODE: <span>OBSIDIAN-13</span></p>
-          <p>> SIGNAL STATUS: <span class="danger">UNSTABLE</span></p>
-          <p>> LAST ENTRY: <span>02:17:44 / UNKNOWN SITE</span></p>
+        <div class="warning">
+          <h3>WARNING</h3>
+          <p>Proceed with caution. Not everything here is human.</p>
         </div>
-      </div>
+      </aside>
 
-      <div class="archive-monitor parallax-zone">
-        <div class="monitor-header">
-          <span>CAM-07 / BASEMENT HALL</span>
-          <span class="rec">● REC</span>
-        </div>
-
-        <div class="monitor-screen">
-          <div class="cctv-time">02:17:44</div>
-          <div class="hallway parallax" data-speed="10">
-            <div class="hall-light"></div>
-            <div class="hall-door"></div>
-            <div class="long-shadow"></div>
-            <div class="figure"></div>
-          </div>
-          <div class="signal-loss"></div>
-        </div>
-
-        <div class="monitor-footer">
-          <span>FRAME LOSS: 38%</span>
-          <span>AUDIO: MUTED</span>
-        </div>
-      </div>
-    </header>
-
-    <section id="cases" class="reveal">
-      <div class="section-title">
-        <div class="eyebrow">Recovered index / partially redacted</div>
-        <h2>Case <span>Files</span></h2>
-      </div>
-
-      <div class="case-grid">
-        <article class="case-card">
-          <div class="case-top">
-            <span>CASE 0017-A</span>
-            <span class="status open">OPEN</span>
+      <main class="main">
+        <header class="topbar reveal">
+          <div>
+            <p class="quote motion-text" data-speed="-5">
+              “Some doors should remain closed.”
+            </p>
+            <p class="quote red motion-text" data-speed="5">
+              “Some voices should remain unheard.”
+            </p>
           </div>
 
-          <h3>The Red Room Transmission</h3>
+          <div class="clearance dizzy-layer" data-speed="10">
+            <span>Access Level</span>
+            <strong>LEVEL 4</strong>
+            <small>Clearance Required</small>
+          </div>
+        </header>
 
+        <section class="hero reveal">
+          <p class="section-kicker motion-text" data-speed="-4">
+            Evidence // <span>6 items found</span>
+          </p>
+          <h2 class="motion-text" data-speed="7">Recovered Occult Evidence</h2>
           <p>
-            A missing radio operator broadcast the same six words for thirteen
-            hours. The final recording contains a second voice speaking from
-            inside the static.
+            The following records were extracted from damaged drives, sealed
+            police evidence, abandoned facilities, and anomalous surveillance
+            equipment.
           </p>
 
-          <div class="redacted-line"></div>
-          <div class="redacted-line short"></div>
-        </article>
+          <div class="hero-buttons">
+            <a href="#evidence" class="btn red">Open Archive</a>
+            <a href="#audio" class="btn">Review Audio</a>
+          </div>
+        </section>
 
-        <article class="case-card">
-          <div class="case-top">
-            <span>CASE 0042-C</span>
-            <span class="status sealed">SEALED</span>
+        <section id="evidence" class="content-grid reveal">
+          <div class="evidence-grid">
+            <article
+              class="evidence-card dizzy-layer"
+              data-speed="6"
+              data-title="EV_0017_CAM7.mp4"
+              data-type="Security Footage"
+              data-date="07/14/2012"
+              data-desc="Late night security footage. Subject appears in frame at 03:17:41. Motion anomaly detected. Further analysis halted."
+            >
+              <div class="photo photo-hallway">
+                <span class="timestamp">03:17:42<br />CAM 07</span>
+                <div class="hall-figure"></div>
+              </div>
+              <div class="label">
+                <h3>EV_0017_CAM7.mp4</h3>
+                <p>Security Footage</p>
+                <small>07/14/2012</small>
+              </div>
+            </article>
+
+            <article
+              class="evidence-card dizzy-layer"
+              data-speed="-7"
+              data-title="EV_0023_DOOR.jpg"
+              data-type="Site Photo"
+              data-date="07/16/2012"
+              data-desc="Basement door recovered from Site 19. The door appeared open in all photographs despite being sealed shut on-site."
+            >
+              <div class="photo photo-door">
+                <div class="red-door"></div>
+              </div>
+              <div class="label">
+                <h3>EV_0023_DOOR.jpg</h3>
+                <p>Site Photo</p>
+                <small>07/16/2012</small>
+              </div>
+            </article>
+
+            <article
+              class="evidence-card dizzy-layer"
+              data-speed="5"
+              data-title="EV_0031_RITUAL.jpg"
+              data-type="Forensic Photo"
+              data-date="07/18/2012"
+              data-desc="Ritual floor markings found beneath Blackwell Chapel. Pattern changed between photographs."
+            >
+              <div class="photo photo-ritual">
+                <div class="sigil"></div>
+                <div class="candle c1"></div>
+                <div class="candle c2"></div>
+                <div class="candle c3"></div>
+              </div>
+              <div class="label">
+                <h3>EV_0031_RITUAL.jpg</h3>
+                <p>Forensic Photo</p>
+                <small>07/18/2012</small>
+              </div>
+            </article>
+
+            <article
+              class="evidence-card dizzy-layer"
+              data-speed="-6"
+              data-title="EV_0042_FOREST.jpg"
+              data-type="Drone Footage Stills"
+              data-date="07/20/2012"
+              data-desc="Tree line footage taken at 02:04 AM. Figure remains stationary across 416 frames."
+            >
+              <div class="photo photo-forest">
+                <div class="trees"></div>
+                <div class="forest-figure"></div>
+              </div>
+              <div class="label">
+                <h3>EV_0042_FOREST.jpg</h3>
+                <p>Drone Footage Stills</p>
+                <small>07/20/2012</small>
+              </div>
+            </article>
+
+            <article
+              class="evidence-card dizzy-layer"
+              data-speed="8"
+              data-title="EV_0055_CHAPEL.jpg"
+              data-type="Site Photo"
+              data-date="07/22/2012"
+              data-desc="Interior of chapel after incident. Thirteen silhouettes seen in stained glass reflection. Only twelve people entered."
+            >
+              <div class="photo photo-chapel">
+                <div class="chapel-window"></div>
+                <div class="pews"></div>
+              </div>
+              <div class="label">
+                <h3>EV_0055_CHAPEL.jpg</h3>
+                <p>Site Photo</p>
+                <small>07/22/2012</small>
+              </div>
+            </article>
+
+            <article
+              class="evidence-card dizzy-layer"
+              data-speed="-5"
+              data-title="EV_0066_AUDIO.jpg"
+              data-type="Recovered Media"
+              data-date="07/24/2012"
+              data-desc="Cassette tape recovered from locked evidence cabinet. Label reads: DON’T LISTEN. Audio contains unidentified voice."
+            >
+              <div class="photo photo-tape">
+                <div class="tape">
+                  <div class="reel r1"></div>
+                  <div class="reel r2"></div>
+                  <span>DON'T LISTEN</span>
+                </div>
+              </div>
+              <div class="label">
+                <h3>EV_0066_AUDIO.jpg</h3>
+                <p>Recovered Media</p>
+                <small>07/24/2012</small>
+              </div>
+            </article>
           </div>
 
-          <h3>Blackwell Chapel Incident</h3>
+          <aside class="file-panel dizzy-layer" data-speed="9">
+            <div class="file-head">
+              <h3>Evidence File</h3>
+              <span id="fileName">EV_0017_CAM7.mp4</span>
+            </div>
 
-          <p>
-            Twelve witnesses entered the chapel. Security footage shows thirteen
-            silhouettes leaving. None of them cast shadows.
-          </p>
+            <div class="file-paper">
+              <p>
+                <b>FILE ID:</b> <span id="modalFile">EV_0017_CAM7.mp4</span>
+              </p>
+              <p><b>DATE:</b> <span id="modalDate">07/14/2012</span></p>
+              <p><b>TIME:</b> 03:17:42</p>
+              <p><b>SOURCE:</b> CAMERA 07 — HALLWAY</p>
+              <p><b>LOCATION:</b> <span class="redacted"></span> FACILITY</p>
+              <p><b>STATUS:</b> <span class="danger">CORRUPTED</span></p>
 
-          <div class="redacted-line"></div>
-          <div class="redacted-line short"></div>
-        </article>
+              <p class="description" id="modalDesc">
+                Late night security footage. Subject appears in frame at
+                03:17:41. Motion anomaly detected. Further analysis halted.
+              </p>
 
-        <article class="case-card">
-          <div class="case-top">
-            <span>CASE 0091-X</span>
-            <span class="status danger">ACTIVE</span>
+              <div class="black-redaction"></div>
+              <div class="black-redaction short"></div>
+
+              <p class="signed">// AUTHORIZED PERSONNEL ONLY</p>
+            </div>
+          </aside>
+        </section>
+
+        <section id="audio" class="bottom-grid reveal">
+          <div class="audio-box dizzy-layer" data-speed="-7">
+            <div class="audio-head">
+              <h3>Audio Transcript</h3>
+              <span>LOG_0017</span>
+            </div>
+
+            <div class="transcript" id="transcript">
+              <p>[00:00:00] [breathing detected]</p>
+              <p>[00:00:03] [whispering — unintelligible]</p>
+            </div>
           </div>
 
-          <h3>The Mirror That Kept Breathing</h3>
+          <div class="player dizzy-layer" data-speed="6">
+            <p>Current Recording: <span>LOG_0017.wav</span></p>
 
-          <p>
-            The object fogged from the inside for four days. Analysis revealed
-            the condensation contained human DNA from an unidentified source.
-          </p>
+            <button class="play-btn" onclick="playForbiddenAudio()">
+              ● DO NOT PLAY
+            </button>
 
-          <div class="redacted-line"></div>
-          <div class="redacted-line short"></div>
-        </article>
-      </div>
-    </section>
+            <div class="waveform">
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
 
-    <section id="evidence" class="reveal">
-      <div class="section-title">
-        <div class="eyebrow">Evidence recovered from restricted sites</div>
-        <h2>Recovered <span>Evidence</span></h2>
-      </div>
+            <div class="quality">
+              <p>Audio Quality: <span>Poor</span></p>
+              <p>Signal: <span class="bars"></span></p>
+            </div>
+          </div>
+        </section>
 
-      <div class="evidence-grid">
-        <div
-          class="evidence-card photo-door"
-          data-label="EVIDENCE 12-B / RED DOOR"
-        >
-          <div class="photo-noise"></div>
-          <div class="photo-door-core"></div>
-        </div>
-
-        <div
-          class="evidence-card photo-woods"
-          data-label="EVIDENCE 22-F / TREE LINE"
-        >
-          <div class="photo-noise"></div>
-          <div class="tree-line"></div>
-          <div class="distant-person"></div>
-        </div>
-
-        <div
-          class="evidence-card photo-sigil"
-          data-label="EVIDENCE 31-K / FLOOR MARK"
-        >
-          <div class="photo-noise"></div>
-          <div class="floor-sigil"></div>
-        </div>
-
-        <div
-          class="evidence-card photo-tape"
-          data-label="EVIDENCE 44-D / TAPE STILL"
-        >
-          <div class="photo-noise"></div>
-          <div class="tape-eye"></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="reports" class="reveal">
-      <div class="section-title">
-        <div class="eyebrow">Witness testimony / damaged transcript</div>
-        <h2>Witness <span>Reports</span></h2>
-      </div>
-
-      <div class="reports-layout">
-        <div class="report-page">
-          <div class="paper-header">
-            <span>REPORT 77-Q</span>
-            <span>CONFIDENTIAL</span>
+        <section id="cases" class="case-strip reveal">
+          <div class="case-mini dizzy-layer" data-speed="4">
+            <h3>CASE 0017-A</h3>
+            <p>The Red Room Transmission</p>
           </div>
 
-          <h3>Interview Fragment</h3>
+          <div class="case-mini dizzy-layer" data-speed="-4">
+            <h3>CASE 0042-C</h3>
+            <p>Blackwell Chapel Incident</p>
+          </div>
 
+          <div class="case-mini dizzy-layer" data-speed="5">
+            <h3>CASE 0091-X</h3>
+            <p>The Mirror That Kept Breathing</p>
+          </div>
+        </section>
+
+        <section id="reports" class="report reveal dizzy-layer" data-speed="-5">
+          <h3>Recovered Report Fragment</h3>
           <p>
             “The hallway was longer when I looked back. I counted the doors
             twice. There were nine the first time and eleven the second. The
             last door had my name on it.”
           </p>
 
-          <p>
-            “Something knocked from the other side. Not on the door. On the
-            inside of my skull.”
-          </p>
+          <div class="black-redaction"></div>
+          <div class="black-redaction medium"></div>
+        </section>
 
-          <div class="redacted-block"></div>
-          <div class="redacted-block small"></div>
-        </div>
+        <section id="registry" class="registry reveal">
+          <form
+            onsubmit="submitReport(event)"
+            class="dizzy-layer"
+            data-speed="5"
+          >
+            <h3>Submit Incident Report</h3>
+            <input type="text" placeholder="Name / Alias" required />
+            <input type="email" placeholder="Secure Email" required />
+            <input type="text" placeholder="Location" />
+            <textarea
+              placeholder="Describe what you saw. Include sounds, smells, missing time, and whether it noticed you."
+            ></textarea>
+            <button class="btn red" type="submit">Submit Report</button>
+          </form>
+        </section>
 
-        <div class="audio-panel">
-          <div class="audio-title">RECOVERED AUDIO</div>
-          <div class="waveform">
-            <span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
+        <footer>
+          <p>© 2026 The Black Archive. Unauthorized access has been logged.</p>
+        </footer>
+      </main>
+    </div>
 
-          <p>
-            Transcript analysis failed. Playback produced nausea, nosebleeds,
-            and repeated reports of a child whispering behind the listener.
-          </p>
-
-          <button class="btn red" onclick="triggerManualGlitch()">
-            Do Not Play
-          </button>
-        </div>
+    <div class="modal" id="evidenceModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <h3 id="modalTitle">Evidence File</h3>
+        <p id="modalType">Security Footage</p>
+        <p id="modalDateLarge">07/14/2012</p>
+        <p id="modalLargeDesc">Description</p>
+        <div class="modal-redacted"></div>
+        <button class="btn red" onclick="triggerGlitch()">Run Analysis</button>
       </div>
-    </section>
-
-    <section id="registry" class="reveal">
-      <div class="section-title">
-        <div class="eyebrow">Submit a sighting / archived automatically</div>
-        <h2>Incident <span>Registry</span></h2>
-      </div>
-
-      <div class="registry-grid">
-        <div class="panel">
-          <h3>Before Submitting</h3>
-
-          <p>
-            Do not include names of deceased relatives unless they appeared in
-            the sighting. Do not upload mirrors. Do not describe the voice if it
-            used your own voice.
-          </p>
-
-          <div class="warning-list">
-            <p>WARNING: false reports are harmless.</p>
-            <p>TRUE reports are not.</p>
-          </div>
-        </div>
-
-        <form class="panel" onsubmit="submitForm(event)">
-          <h3>New Incident Report</h3>
-
-          <input type="text" placeholder="Your Name / Alias" required />
-          <input type="email" placeholder="Secure Email" required />
-          <input type="text" placeholder="Location of Incident" />
-          <textarea
-            placeholder="Describe what you saw. Include sounds, smells, missing time, and whether it noticed you."
-          ></textarea>
-
-          <button class="btn red" type="submit">Submit Report</button>
-        </form>
-      </div>
-    </section>
-
-    <footer>
-      <p>© 2026 The Black Archive. Unauthorized access has been logged.</p>
-    </footer>
+    </div>
 
     <script src="script.js"></script>
   </body>
