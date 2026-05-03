@@ -21,20 +21,28 @@ const searchStatus = document.getElementById("searchStatus");
 const decryptScreen = document.getElementById("decryptScreen");
 const decryptText = document.getElementById("decryptText");
 const breachAlert = document.getElementById("breachAlert");
+const audioStatus = document.getElementById("audioStatus");
 
 const transcriptLines = [
   "[00:00:00] [breathing detected]",
   "[00:00:03] [whispering — unintelligible]",
   "[00:00:07] VOICE: ...behind you...",
   "[00:00:11] [static surge]",
-  "[00:00:14] VOICE: ...don’t close your eyes...",
+  "[00:00:14] VOICE: ...do not close your eyes...",
   "[00:00:18] [breathing intensifies]",
-  "[00:00:22] VOICE: ...it knows you’re here...",
+  "[00:00:22] VOICE: ...it knows you are here...",
   "[00:00:27] [sound of something moving]",
   "[00:00:31] [audio corrupted]",
-  "[00:00:35] VOICE: RUN.",
+  "[00:00:35] VOICE: ...run...",
   "[00:00:37] [END OF RECORDING]",
 ];
+
+const voiceLineMap = {
+  "[00:00:07] VOICE: ...behind you...": "Behind you.",
+  "[00:00:14] VOICE: ...do not close your eyes...": "Do not close your eyes.",
+  "[00:00:22] VOICE: ...it knows you are here...": "It knows you are here.",
+  "[00:00:35] VOICE: ...run...": "Run.",
+};
 
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
@@ -44,6 +52,8 @@ let tremoloOscillator;
 let noiseNode;
 let speechTimeouts = [];
 let transcriptInterval = null;
+let audioUnlocked = false;
+let breachTimerStarted = false;
 
 document.addEventListener("mousemove", (event) => {
   if (trail) {
@@ -58,12 +68,12 @@ document.addEventListener("mousemove", (event) => {
 
   dizzyLayers.forEach((layer) => {
     const speed = Number(layer.dataset.speed || 4);
-    layer.style.translate = `${x * speed}px ${y * speed}px`;
+    layer.style.translate = `${x * speed * 2.1}px ${y * speed * 2.1}px`;
   });
 
   motionTexts.forEach((text) => {
     const speed = Number(text.dataset.speed || 4);
-    text.style.translate = `${x * speed * 0.7}px ${y * speed * 0.7}px`;
+    text.style.translate = `${x * speed * 1.7}px ${y * speed * 1.7}px`;
   });
 });
 
@@ -76,7 +86,7 @@ function triggerGlitch() {
 }
 
 function scheduleRandomGlitch() {
-  const delay = 3600 + Math.random() * 3600;
+  const delay = 4200 + Math.random() * 4200;
 
   setTimeout(() => {
     triggerGlitch();
@@ -85,6 +95,21 @@ function scheduleRandomGlitch() {
 }
 
 scheduleRandomGlitch();
+
+function startBreachTimerOnce() {
+  if (breachTimerStarted || !breachAlert) return;
+
+  breachTimerStarted = true;
+
+  setTimeout(() => {
+    breachAlert.classList.add("active");
+    triggerGlitch();
+
+    setTimeout(() => {
+      breachAlert.classList.remove("active");
+    }, 3200);
+  }, 24000);
+}
 
 function showDecrypt(callback) {
   const messages = [
@@ -206,6 +231,34 @@ function ensureAudioContext() {
   return audioContext;
 }
 
+async function unlockArchiveAudio() {
+  try {
+    const ctx = ensureAudioContext();
+
+    if (ctx.state === "suspended") {
+      await ctx.resume();
+    }
+
+    if (typeof Tone !== "undefined") {
+      await Tone.start();
+    }
+
+    audioUnlocked = true;
+
+    if (audioStatus) {
+      audioStatus.textContent = "Ready";
+    }
+
+    startBreachTimerOnce();
+  } catch (error) {
+    console.error("Audio unlock failed:", error);
+
+    if (audioStatus) {
+      audioStatus.textContent = "Unlock failed";
+    }
+  }
+}
+
 function startCreepyAudio() {
   stopForbiddenAudio(false);
 
@@ -223,8 +276,8 @@ function startCreepyAudio() {
   tremoloOscillator.type = "sine";
   tremoloOscillator.frequency.value = 6.2;
 
-  tremoloGain.gain.value = 0.07;
-  droneGain.gain.value = 0.035;
+  tremoloGain.gain.value = 0.04;
+  droneGain.gain.value = 0.018;
 
   tremoloOscillator.connect(tremoloGain);
   tremoloGain.connect(droneGain.gain);
@@ -244,7 +297,7 @@ function startCreepyAudio() {
   noiseNode.loop = true;
 
   const noiseGain = ctx.createGain();
-  noiseGain.gain.value = 0.035;
+  noiseGain.gain.value = 0.015;
 
   noiseNode.connect(noiseGain);
   noiseGain.connect(ctx.destination);
@@ -252,6 +305,10 @@ function startCreepyAudio() {
   droneOscillator.start();
   tremoloOscillator.start();
   noiseNode.start();
+
+  if (audioStatus) {
+    audioStatus.textContent = "Playing";
+  }
 }
 
 function stopForbiddenAudio(closeContext = true) {
@@ -285,49 +342,37 @@ function stopForbiddenAudio(closeContext = true) {
 
   if (closeContext) {
     audioContext = null;
+    audioUnlocked = false;
+
+    if (audioStatus) {
+      audioStatus.textContent = "Stopped";
+    }
   }
 }
 
 async function playDemonicToneLayer() {
-  if (typeof Tone === "undefined") {
-    console.warn("Tone.js is not loaded.");
-    return;
-  }
+  if (typeof Tone === "undefined") return;
 
   await Tone.start();
 
-  const distortion = new Tone.Distortion(0.9);
+  const distortion = new Tone.Distortion(0.75);
   const pitchShift = new Tone.PitchShift(-12);
-
-  const reverb = new Tone.Reverb({
-    decay: 8,
-    wet: 0.58,
-  });
-
+  const reverb = new Tone.Reverb({ decay: 8, wet: 0.48 });
   const delay = new Tone.FeedbackDelay({
     delayTime: 0.22,
-    feedback: 0.48,
-    wet: 0.38,
+    feedback: 0.36,
+    wet: 0.28,
   });
-
   const bitCrusher = new Tone.BitCrusher(4);
-
   const filter = new Tone.Filter({
-    frequency: 580,
+    frequency: 620,
     type: "lowpass",
     rolloff: -24,
   });
 
   const synth = new Tone.MonoSynth({
-    oscillator: {
-      type: "sawtooth",
-    },
-    envelope: {
-      attack: 0.18,
-      decay: 0.45,
-      sustain: 0.28,
-      release: 1.9,
-    },
+    oscillator: { type: "sawtooth" },
+    envelope: { attack: 0.18, decay: 0.45, sustain: 0.22, release: 1.7 },
   });
 
   synth.chain(
@@ -361,12 +406,12 @@ async function playDemonicToneLayer() {
 function playWhisperBurst() {
   const ctx = ensureAudioContext();
 
-  const bufferSize = ctx.sampleRate * 0.8;
+  const bufferSize = ctx.sampleRate * 0.65;
   const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
   const data = buffer.getChannelData(0);
 
   for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * 0.08;
+    data[i] = (Math.random() * 2 - 1) * 0.055;
   }
 
   const source = ctx.createBufferSource();
@@ -374,13 +419,13 @@ function playWhisperBurst() {
 
   const filter = ctx.createBiquadFilter();
   filter.type = "bandpass";
-  filter.frequency.value = 900;
+  filter.frequency.value = 1050;
   filter.Q.value = 4;
 
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0.001, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 0.08);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.75);
+  gain.gain.exponentialRampToValueAtTime(0.05, ctx.currentTime + 0.08);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.62);
 
   source.connect(filter);
   filter.connect(gain);
@@ -389,76 +434,69 @@ function playWhisperBurst() {
   source.start();
 }
 
-function speakDemonicLine(text, delay = 0) {
+function speakDemonicLine(text) {
   if (!("speechSynthesis" in window)) return;
 
-  const timeoutId = setTimeout(() => {
-    const main = new SpeechSynthesisUtterance(text);
-    main.rate = 0.42;
-    main.pitch = 0.08;
-    main.volume = 0.42;
+  speechSynthesis.cancel();
 
-    const lowEcho = new SpeechSynthesisUtterance(text);
-    lowEcho.rate = 0.32;
-    lowEcho.pitch = 0.01;
-    lowEcho.volume = 0.22;
+  const voices = speechSynthesis.getVoices();
 
-    const highGhost = new SpeechSynthesisUtterance(text);
-    highGhost.rate = 0.7;
-    highGhost.pitch = 0.55;
-    highGhost.volume = 0.11;
+  const main = new SpeechSynthesisUtterance(text);
+  main.rate = 0.33;
+  main.pitch = 0.03;
+  main.volume = 0.95;
 
-    triggerGlitch();
+  const echo = new SpeechSynthesisUtterance(text);
+  echo.rate = 0.25;
+  echo.pitch = 0.01;
+  echo.volume = 0.55;
+
+  const ghost = new SpeechSynthesisUtterance(text);
+  ghost.rate = 0.65;
+  ghost.pitch = 0.35;
+  ghost.volume = 0.18;
+
+  const voice = voices.find(
+    (v) =>
+      v.name.toLowerCase().includes("zira") ||
+      v.name.toLowerCase().includes("google") ||
+      v.name.toLowerCase().includes("natural"),
+  );
+
+  if (voice) {
+    main.voice = voice;
+    echo.voice = voice;
+    ghost.voice = voice;
+  }
+
+  triggerGlitch();
+  playWhisperBurst();
+  playDemonicToneLayer();
+
+  speechSynthesis.speak(main);
+
+  const echoTimeout = setTimeout(() => {
     playWhisperBurst();
-    playDemonicToneLayer();
+    speechSynthesis.speak(echo);
+  }, 260);
 
-    speechSynthesis.speak(main);
+  const ghostTimeout = setTimeout(() => {
+    speechSynthesis.speak(ghost);
+  }, 520);
 
-    const echoTimeout = setTimeout(() => {
-      playWhisperBurst();
-      speechSynthesis.speak(lowEcho);
-    }, 240);
-
-    const ghostTimeout = setTimeout(() => {
-      speechSynthesis.speak(highGhost);
-    }, 470);
-
-    const extraToneTimeout = setTimeout(() => {
-      playDemonicToneLayer();
-    }, 760);
-
-    speechTimeouts.push(echoTimeout, ghostTimeout, extraToneTimeout);
-  }, delay);
-
-  speechTimeouts.push(timeoutId);
+  speechTimeouts.push(echoTimeout, ghostTimeout);
 }
 
 async function playForbiddenAudio() {
+  stopForbiddenAudio(false);
+  await unlockArchiveAudio();
+
   triggerGlitch();
   startCreepyAudio();
-
-  if ("speechSynthesis" in window) {
-    speechSynthesis.cancel();
-  }
 
   if (transcript) {
     transcript.innerHTML = "";
   }
-
-  const spokenLines = [
-    "Momina .",
-    "Momina .",
-    "Momina .",
-    "You opened the wrong file.",
-    "It is behind the recording.",
-    "Do not close your eyes.",
-    "It knows you are here.",
-    "Run.",
-  ];
-
-  spokenLines.forEach((line, index) => {
-    speakDemonicLine(line, 1200 + index * 2300);
-  });
 
   let index = 0;
 
@@ -469,13 +507,13 @@ async function playForbiddenAudio() {
       return;
     }
 
+    const lineText = transcriptLines[index];
     const line = document.createElement("p");
-    line.textContent = transcriptLines[index];
+    line.textContent = lineText;
 
-    if (line.textContent.includes("VOICE")) {
+    if (lineText.includes("VOICE")) {
       line.classList.add("voice");
-      playWhisperBurst();
-      playDemonicToneLayer();
+      speakDemonicLine(voiceLineMap[lineText] || "Do not listen.");
       triggerGlitch();
 
       document.body.style.filter =
@@ -492,7 +530,7 @@ async function playForbiddenAudio() {
     }
 
     index++;
-  }, 520);
+  }, 900);
 }
 
 if (searchInput) {
@@ -523,17 +561,6 @@ if (searchInput) {
       searchStatus.textContent = `${visible} file(s) recovered. Some metadata may be false.`;
     }
   });
-}
-
-if (breachAlert) {
-  setTimeout(() => {
-    breachAlert.classList.add("active");
-    triggerGlitch();
-
-    setTimeout(() => {
-      breachAlert.classList.remove("active");
-    }, 3200);
-  }, 24000);
 }
 
 const observer = new IntersectionObserver(
