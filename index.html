@@ -3,378 +3,279 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Wound Beneath</title>
+    <title>The Black Archive</title>
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <div class="film-grain"></div>
+    <div class="grain"></div>
+    <div class="scanlines"></div>
     <div class="vignette"></div>
-    <div class="static"></div>
-    <div class="fog"></div>
-
-    <div class="drip d1"></div>
-    <div class="drip d2"></div>
-    <div class="drip d3"></div>
-
     <div class="cursor-trail"></div>
 
-    <div class="whisper" style="top: 18%; left: 6%">do not descend</div>
-    <div class="whisper" style="top: 48%; right: 7%; animation-delay: 2s">
-      it knows your name
+    <div class="classified-stamp">CLASSIFIED</div>
+
+    <div class="whisper" style="top: 18%; left: 5%">file corrupted</div>
+    <div class="whisper" style="top: 56%; right: 7%; animation-delay: 2s">
+      subject still breathing
     </div>
-    <div class="whisper" style="bottom: 18%; left: 31%; animation-delay: 4s">
-      the moon blinked
-    </div>
-    <div class="whisper" style="top: 72%; left: 8%; animation-delay: 6s">
-      the walls are breathing
+    <div class="whisper" style="bottom: 16%; left: 34%; animation-delay: 4s">
+      do not replay audio
     </div>
 
     <nav class="navbar">
-      <div class="logo">THE WOUND BENEATH</div>
+      <div class="logo">THE BLACK ARCHIVE</div>
 
       <button class="menu-btn" onclick="toggleMenu()">☰</button>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#lore">The Wound</a></li>
-        <li><a href="#orders">Orders</a></li>
-        <li><a href="#districts">Districts</a></li>
-        <li><a href="#visions">Visions</a></li>
-        <li><a href="#join">Descend</a></li>
+        <li><a href="#home">Index</a></li>
+        <li><a href="#cases">Case Files</a></li>
+        <li><a href="#evidence">Evidence</a></li>
+        <li><a href="#reports">Reports</a></li>
+        <li><a href="#registry">Registry</a></li>
       </ul>
     </nav>
 
     <header class="hero reveal" id="home">
-      <div>
-        <div class="eyebrow">Do not answer the thing below</div>
+      <div class="hero-copy">
+        <div class="eyebrow">Restricted access / clearance level 7</div>
 
-        <h1>The City Is <span>Listening</span></h1>
+        <h1>The Black <span>Archive</span></h1>
 
         <p>
-          Beneath the cathedral, beneath the blood, beneath the black stone
-          streets, there is a wound in reality. It dreams in crystal blue. It
-          bleeds red. It opens green eyes in the dark.
+          A classified occult investigation database containing corrupted case
+          files, redacted witness reports, CCTV stills, ritual photographs, and
+          recovered recordings that should not be played twice.
         </p>
 
         <div class="hero-buttons">
-          <a href="#join" class="btn red">Descend Anyway</a>
-          <a href="#lore" class="btn">Read the Forbidden Record</a>
+          <a href="#cases" class="btn red">Open Case Index</a>
+          <a href="#evidence" class="btn">Review Evidence</a>
+        </div>
+
+        <div class="terminal-box">
+          <p>> ACCESS NODE: <span>OBSIDIAN-13</span></p>
+          <p>> SIGNAL STATUS: <span class="danger">UNSTABLE</span></p>
+          <p>> LAST ENTRY: <span>02:17:44 / UNKNOWN SITE</span></p>
         </div>
       </div>
 
-      <div class="eldritch-art parallax-zone">
-        <div class="black-sun parallax" data-speed="24">
-          <div class="pupil"></div>
+      <div class="archive-monitor parallax-zone">
+        <div class="monitor-header">
+          <span>CAM-07 / BASEMENT HALL</span>
+          <span class="rec">● REC</span>
         </div>
 
-        <div class="tentacle tenta1 parallax" data-speed="-18"></div>
-        <div class="tentacle tenta2 parallax" data-speed="18"></div>
-        <div class="tentacle tenta3 parallax" data-speed="-8"></div>
-
-        <div class="eldritch-city parallax" data-speed="10">
-          <div class="spire s1"></div>
-          <div class="spire s2"></div>
-          <div class="cathedral">
-            <div class="cathedral-cross"></div>
-            <div class="gate"></div>
+        <div class="monitor-screen">
+          <div class="cctv-time">02:17:44</div>
+          <div class="hallway parallax" data-speed="10">
+            <div class="hall-light"></div>
+            <div class="hall-door"></div>
+            <div class="long-shadow"></div>
+            <div class="figure"></div>
           </div>
-          <div class="spire s3"></div>
-          <div class="spire s4"></div>
-          <div class="spire s5"></div>
+          <div class="signal-loss"></div>
         </div>
 
-        <div class="crystal c1 parallax" data-speed="-14"></div>
-        <div class="crystal c2 parallax" data-speed="16"></div>
-        <div class="crystal c3 parallax" data-speed="8"></div>
-
-        <div class="ground-fog parallax" data-speed="-6"></div>
-
-        <div class="floating-box">
-          <h3>The Choir Under the Floor</h3>
-          <p>
-            It presses thoughts into your bones until your shadow begins to
-            pray.
-          </p>
+        <div class="monitor-footer">
+          <span>FRAME LOSS: 38%</span>
+          <span>AUDIO: MUTED</span>
         </div>
       </div>
     </header>
 
-    <section id="lore" class="reveal">
+    <section id="cases" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">The scripture moves when unread</div>
-        <h2>Lore of the <span>Wound</span></h2>
+        <div class="eyebrow">Recovered index / partially redacted</div>
+        <h2>Case <span>Files</span></h2>
       </div>
 
-      <div class="grid-2">
-        <div class="ritual-art">
-          <div class="mini-eye e1"></div>
-          <div class="mini-eye e2"></div>
-          <div class="mini-eye e3"></div>
-          <div class="mini-eye e4"></div>
+      <div class="case-grid">
+        <article class="case-card">
+          <div class="case-top">
+            <span>CASE 0017-A</span>
+            <span class="status open">OPEN</span>
+          </div>
 
-          <div class="ring"></div>
-          <div class="hanging-corpse-shape"></div>
-          <div class="altar"></div>
+          <h3>The Red Room Transmission</h3>
+
+          <p>
+            A missing radio operator broadcast the same six words for thirteen
+            hours. The final recording contains a second voice speaking from
+            inside the static.
+          </p>
+
+          <div class="redacted-line"></div>
+          <div class="redacted-line short"></div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-top">
+            <span>CASE 0042-C</span>
+            <span class="status sealed">SEALED</span>
+          </div>
+
+          <h3>Blackwell Chapel Incident</h3>
+
+          <p>
+            Twelve witnesses entered the chapel. Security footage shows thirteen
+            silhouettes leaving. None of them cast shadows.
+          </p>
+
+          <div class="redacted-line"></div>
+          <div class="redacted-line short"></div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-top">
+            <span>CASE 0091-X</span>
+            <span class="status danger">ACTIVE</span>
+          </div>
+
+          <h3>The Mirror That Kept Breathing</h3>
+
+          <p>
+            The object fogged from the inside for four days. Analysis revealed
+            the condensation contained human DNA from an unidentified source.
+          </p>
+
+          <div class="redacted-line"></div>
+          <div class="redacted-line short"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="evidence" class="reveal">
+      <div class="section-title">
+        <div class="eyebrow">Evidence recovered from restricted sites</div>
+        <h2>Recovered <span>Evidence</span></h2>
+      </div>
+
+      <div class="evidence-grid">
+        <div
+          class="evidence-card photo-door"
+          data-label="EVIDENCE 12-B / RED DOOR"
+        >
+          <div class="photo-noise"></div>
+          <div class="photo-door-core"></div>
         </div>
 
-        <div class="panel breathing">
-          <h3>A City Built Over Something Alive</h3>
+        <div
+          class="evidence-card photo-woods"
+          data-label="EVIDENCE 22-F / TREE LINE"
+        >
+          <div class="photo-noise"></div>
+          <div class="tree-line"></div>
+          <div class="distant-person"></div>
+        </div>
 
-          <p>
-            The first hunters believed the blood was medicine. The scholars
-            believed the crystals were stars that had fallen into the earth.
-            Both were wrong. The blood was a language. The crystals were teeth.
-          </p>
+        <div
+          class="evidence-card photo-sigil"
+          data-label="EVIDENCE 31-K / FLOOR MARK"
+        >
+          <div class="photo-noise"></div>
+          <div class="floor-sigil"></div>
+        </div>
 
-          <p>
-            Every cure opened another eye. Every bell invited another shape. And
-            every hunter who survived the night returned with a little less of
-            his own reflection.
-          </p>
-
-          <div class="stats">
-            <div class="stat">
-              <strong>17</strong>
-              <span>Unmarked Graves</span>
-            </div>
-
-            <div class="stat">
-              <strong>9</strong>
-              <span>Wrong Moons</span>
-            </div>
-
-            <div class="stat">
-              <strong>∞</strong>
-              <span>Eyes Beneath</span>
-            </div>
-          </div>
+        <div
+          class="evidence-card photo-tape"
+          data-label="EVIDENCE 44-D / TAPE STILL"
+        >
+          <div class="photo-noise"></div>
+          <div class="tape-eye"></div>
         </div>
       </div>
     </section>
 
-    <section id="orders" class="reveal">
+    <section id="reports" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">No order remains clean</div>
-        <h2>Corrupted <span>Orders</span></h2>
+        <div class="eyebrow">Witness testimony / damaged transcript</div>
+        <h2>Witness <span>Reports</span></h2>
       </div>
 
-      <div class="cards">
-        <div class="card breathing">
-          <div class="icon">☽</div>
-          <h3>The Moon-Sick Hunters</h3>
+      <div class="reports-layout">
+        <div class="report-page">
+          <div class="paper-header">
+            <span>REPORT 77-Q</span>
+            <span>CONFIDENTIAL</span>
+          </div>
+
+          <h3>Interview Fragment</h3>
+
           <p>
-            They hunt beasts in the alleys, but hear lullabies from wells and
-            see their own faces watching from high windows.
+            “The hallway was longer when I looked back. I counted the doors
+            twice. There were nine the first time and eleven the second. The
+            last door had my name on it.”
           </p>
+
+          <p>
+            “Something knocked from the other side. Not on the door. On the
+            inside of my skull.”
+          </p>
+
+          <div class="redacted-block"></div>
+          <div class="redacted-block small"></div>
         </div>
 
-        <div class="card breathing">
-          <div class="icon">✦</div>
-          <h3>The Crystal Choir</h3>
-          <p>
-            Their skulls glow with blue-green insight. They no longer blink
-            together. They no longer dream alone.
-          </p>
-        </div>
+        <div class="audio-panel">
+          <div class="audio-title">RECOVERED AUDIO</div>
+          <div class="waveform">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
 
-        <div class="card breathing">
-          <div class="icon">☉</div>
-          <h3>The Blood Ministers</h3>
           <p>
-            They cure fever, stitch wounds, and pour red prayers into veins
-            until the body remembers ancient things.
+            Transcript analysis failed. Playback produced nausea, nosebleeds,
+            and repeated reports of a child whispering behind the listener.
           </p>
+
+          <button class="btn red" onclick="triggerManualGlitch()">
+            Do Not Play
+          </button>
         </div>
       </div>
     </section>
 
-    <section id="districts" class="reveal">
+    <section id="registry" class="reveal">
       <div class="section-title">
-        <div class="eyebrow">The streets bend when observed</div>
-        <h2>Rotten <span>Districts</span></h2>
+        <div class="eyebrow">Submit a sighting / archived automatically</div>
+        <h2>Incident <span>Registry</span></h2>
       </div>
 
-      <div class="grid-2">
-        <div class="eldritch-art">
-          <div class="black-sun">
-            <div class="pupil"></div>
-          </div>
-
-          <div class="tentacle tenta1"></div>
-          <div class="tentacle tenta2"></div>
-
-          <div class="eldritch-city">
-            <div class="spire s1"></div>
-            <div class="spire s2"></div>
-            <div class="cathedral">
-              <div class="cathedral-cross"></div>
-              <div class="gate"></div>
-            </div>
-            <div class="spire s3"></div>
-            <div class="spire s4"></div>
-            <div class="spire s5"></div>
-          </div>
-
-          <div class="crystal c1"></div>
-          <div class="crystal c2"></div>
-          <div class="ground-fog"></div>
-        </div>
-
-        <div class="district-list">
-          <div class="district breathing">
-            <h3>The Lantern Ward</h3>
-            <p>
-              Lamps burn green and shadows arrive several seconds before their
-              owners.
-            </p>
-          </div>
-
-          <div class="district breathing">
-            <h3>The Glass Chapel</h3>
-            <p>
-              A cathedral of blue crystal ribs humming with prayers from mouths
-              in the walls.
-            </p>
-          </div>
-
-          <div class="district breathing">
-            <h3>Redwater Canal</h3>
-            <p>
-              The canal does not reflect the moon. It reflects what the moon is
-              afraid of.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="visions" class="reveal">
-      <div class="section-title">
-        <div class="eyebrow">Things seen after too much blood</div>
-        <h2>Forbidden <span>Visions</span></h2>
-      </div>
-
-      <div class="gallery">
-        <div class="gallery-card scene-eye" data-title="The Open Eye">
-          <div class="eye-symbol"></div>
-          <div class="fade"></div>
-        </div>
-
-        <div class="gallery-card scene-abyss" data-title="The Red Door Below">
-          <div class="abyss-door">
-            <div class="door-crack"></div>
-            <div class="red-depth"></div>
-          </div>
-          <div class="silhouette-hand hand-left"></div>
-          <div class="silhouette-hand hand-right"></div>
-          <div class="fade"></div>
-        </div>
-
-        <div class="gallery-card scene-crystal" data-title="Crystal Infection">
-          <div class="big-crystal"></div>
-          <div class="fade"></div>
-        </div>
-
-        <div class="gallery-card scene-symbol" data-title="Wrong Geometry">
-          <div class="wrong-symbol"></div>
-          <div class="fade"></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="join" class="reveal">
-      <div class="section-title">
-        <div class="eyebrow">The bell has selected you</div>
-        <h2>Descend <span>Deeper</span></h2>
-      </div>
-
-      <div class="pricing">
-        <div class="price-card breathing">
-          <h3>Witness</h3>
-          <div class="price">Free</div>
-
-          <ul>
-            <li>One lantern</li>
-            <li>One blood vial</li>
-            <li>One unanswered whisper</li>
-            <li>No guarantee of sleep</li>
-          </ul>
-
-          <a href="#contact" class="btn">Begin</a>
-        </div>
-
-        <div class="price-card featured breathing">
-          <h3>Marked Hunter</h3>
-          <div class="price">$19</div>
-
-          <ul>
-            <li>Crystal blade</li>
-            <li>Forbidden archive</li>
-            <li>Dream-layer map</li>
-            <li>Second shadow access</li>
-          </ul>
-
-          <a href="#contact" class="btn red">Take the Mark</a>
-        </div>
-
-        <div class="price-card breathing">
-          <h3>Elder Witness</h3>
-          <div class="price">$49</div>
-
-          <ul>
-            <li>Communion rite</li>
-            <li>Open-eye vision</li>
-            <li>Cathedral descent</li>
-            <li>Name removed from mirrors</li>
-          </ul>
-
-          <a href="#contact" class="btn">Ascend</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="reveal">
-      <div class="section-title">
-        <div class="eyebrow">Speak softly; it answers quickly</div>
-        <h2>The <span>Registry</span></h2>
-      </div>
-
-      <div class="grid-2">
-        <div class="panel breathing">
-          <h3>Leave Your Name Below</h3>
+      <div class="registry-grid">
+        <div class="panel">
+          <h3>Before Submitting</h3>
 
           <p>
-            The registry is carved into black glass under the cathedral. Names
-            entered here are sometimes seen moving at night.
+            Do not include names of deceased relatives unless they appeared in
+            the sighting. Do not upload mirrors. Do not describe the voice if it
+            used your own voice.
           </p>
 
-          <p>📍 Beneath the Glass Chapel</p>
-          <p>✉️ registry@woundbeneath.com</p>
-          <p>☉ Open when the moon blinks</p>
+          <div class="warning-list">
+            <p>WARNING: false reports are harmless.</p>
+            <p>TRUE reports are not.</p>
+          </div>
         </div>
 
-        <form class="panel breathing" onsubmit="submitForm(event)">
-          <h3>Registry Form</h3>
+        <form class="panel" onsubmit="submitForm(event)">
+          <h3>New Incident Report</h3>
 
-          <div class="form-eyes">
-            <div class="form-eye"></div>
-            <div class="form-eye"></div>
-            <div class="form-eye"></div>
-          </div>
+          <input type="text" placeholder="Your Name / Alias" required />
+          <input type="email" placeholder="Secure Email" required />
+          <input type="text" placeholder="Location of Incident" />
+          <textarea
+            placeholder="Describe what you saw. Include sounds, smells, missing time, and whether it noticed you."
+          ></textarea>
 
-          <input type="text" placeholder="Your Name" required />
-          <input type="email" placeholder="Email Address" required />
-          <input type="text" placeholder="What followed you here?" />
-          <textarea placeholder="Describe the dream. Do not lie."></textarea>
-
-          <button class="btn red" type="submit">Submit Name</button>
+          <button class="btn red" type="submit">Submit Report</button>
         </form>
       </div>
     </section>
 
     <footer>
-      <p>© 2026 The Wound Beneath. It remembers you now.</p>
+      <p>© 2026 The Black Archive. Unauthorized access has been logged.</p>
     </footer>
 
     <script src="script.js"></script>
