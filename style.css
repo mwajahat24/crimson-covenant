@@ -1648,3 +1648,43 @@ footer {
     height: 240px;
   }
 }
+.tape-analysis p {
+  margin-bottom: 12px;
+  color: #eee1cd;
+  line-height: 1.6;
+}
+
+.analysis-warning {
+  margin: 22px 0;
+  padding: 16px;
+  border: 1px solid rgba(255, 59, 49, 0.6);
+  background: rgba(80, 0, 0, 0.2);
+  color: #ffd9d4;
+  line-height: 1.6;
+  animation: warningPulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes warningPulse {
+  to {
+    box-shadow: 0 0 26px rgba(255, 59, 49, 0.28);
+  }
+}
+
+.anomaly-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.anomaly-list span {
+  display: block;
+  padding: 12px;
+  border-left: 3px solid var(--blood-bright);
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--green-strong);
+  font-size: 0.9rem;
+}
+.waveform.active span {
+  animation-duration: 0.28s;
+  filter: brightness(2.2);
+}
