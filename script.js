@@ -41,8 +41,9 @@ const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 let audioContext;
 let droneOscillator;
 let tremoloOscillator;
-let droneGain;
 let noiseNode;
+let speechTimeouts = [];
+let transcriptInterval = null;
 
 document.addEventListener("mousemove", (event) => {
   if (trail) {
@@ -93,6 +94,11 @@ function showDecrypt(callback) {
     "Entity trace detected...",
   ];
 
+  if (!decryptScreen || !decryptText) {
+    callback();
+    return;
+  }
+
   decryptText.textContent =
     messages[Math.floor(Math.random() * messages.length)];
   decryptScreen.classList.add("active");
@@ -104,6 +110,8 @@ function showDecrypt(callback) {
 }
 
 function buildModalPreview(scene) {
+  if (!modalPhoto) return;
+
   modalPhoto.innerHTML = "";
 
   const photo = document.createElement("div");
@@ -140,26 +148,26 @@ evidenceCards.forEach((card) => {
   card.setAttribute("tabindex", "0");
 
   function openCard() {
-    const title = card.dataset.title;
-    const type = card.dataset.type;
-    const date = card.dataset.date;
-    const desc = card.dataset.desc;
-    const scene = card.dataset.scene;
+    const title = card.dataset.title || "";
+    const type = card.dataset.type || "";
+    const date = card.dataset.date || "";
+    const desc = card.dataset.desc || "";
+    const scene = card.dataset.scene || "";
 
-    fileName.textContent = title;
-    modalFile.textContent = title;
-    modalDate.textContent = date;
-    modalDesc.textContent = desc;
+    if (fileName) fileName.textContent = title;
+    if (modalFile) modalFile.textContent = title;
+    if (modalDate) modalDate.textContent = date;
+    if (modalDesc) modalDesc.textContent = desc;
 
-    modalTitle.textContent = title;
-    modalType.textContent = type;
-    modalDateLarge.textContent = date;
-    modalLargeDesc.textContent = desc;
+    if (modalTitle) modalTitle.textContent = title;
+    if (modalType) modalType.textContent = type;
+    if (modalDateLarge) modalDateLarge.textContent = date;
+    if (modalLargeDesc) modalLargeDesc.textContent = desc;
 
     buildModalPreview(scene);
 
     showDecrypt(() => {
-      modal.classList.add("active");
+      if (modal) modal.classList.add("active");
       triggerGlitch();
     });
   }
@@ -175,27 +183,39 @@ evidenceCards.forEach((card) => {
 });
 
 function closeModal() {
-  modal.classList.remove("active");
+  if (modal) modal.classList.remove("active");
 }
 
-modal.addEventListener("click", (event) => {
-  if (event.target === modal) closeModal();
-});
+if (modal) {
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closeModal();
+  });
+}
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && modal.classList.contains("active")) {
+  if (event.key === "Escape" && modal && modal.classList.contains("active")) {
     closeModal();
   }
 });
 
+function ensureAudioContext() {
+  if (!audioContext || audioContext.state === "closed") {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  return audioContext;
+}
+
 function startCreepyAudio() {
-  stopForbiddenAudio();
+  stopForbiddenAudio(false);
 
-  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const ctx = ensureAudioContext();
 
-  droneOscillator = audioContext.createOscillator();
-  tremoloOscillator = audioContext.createOscillator();
-  droneGain = audioContext.createGain();
+  droneOscillator = ctx.createOscillator();
+  tremoloOscillator = ctx.createOscillator();
+
+  const droneGain = ctx.createGain();
+  const tremoloGain = ctx.createGain();
 
   droneOscillator.type = "sawtooth";
   droneOscillator.frequency.value = 57;
@@ -203,44 +223,46 @@ function startCreepyAudio() {
   tremoloOscillator.type = "sine";
   tremoloOscillator.frequency.value = 6.2;
 
-  const tremoloGain = audioContext.createGain();
   tremoloGain.gain.value = 0.07;
-
   droneGain.gain.value = 0.035;
 
   tremoloOscillator.connect(tremoloGain);
   tremoloGain.connect(droneGain.gain);
   droneOscillator.connect(droneGain);
-  droneGain.connect(audioContext.destination);
+  droneGain.connect(ctx.destination);
 
-  const bufferSize = 2 * audioContext.sampleRate;
-  const noiseBuffer = audioContext.createBuffer(
-    1,
-    bufferSize,
-    audioContext.sampleRate,
-  );
+  const bufferSize = 2 * ctx.sampleRate;
+  const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
   const output = noiseBuffer.getChannelData(0);
 
   for (let i = 0; i < bufferSize; i++) {
     output[i] = (Math.random() * 2 - 1) * 0.04;
   }
 
-  noiseNode = audioContext.createBufferSource();
+  noiseNode = ctx.createBufferSource();
   noiseNode.buffer = noiseBuffer;
   noiseNode.loop = true;
 
-  const noiseGain = audioContext.createGain();
+  const noiseGain = ctx.createGain();
   noiseGain.gain.value = 0.035;
 
   noiseNode.connect(noiseGain);
-  noiseGain.connect(audioContext.destination);
+  noiseGain.connect(ctx.destination);
 
   droneOscillator.start();
   tremoloOscillator.start();
   noiseNode.start();
 }
 
-function stopForbiddenAudio() {
+function stopForbiddenAudio(closeContext = true) {
+  speechTimeouts.forEach(clearTimeout);
+  speechTimeouts = [];
+
+  if (transcriptInterval) {
+    clearInterval(transcriptInterval);
+    transcriptInterval = null;
+  }
+
   try {
     if ("speechSynthesis" in window) {
       speechSynthesis.cancel();
@@ -249,7 +271,10 @@ function stopForbiddenAudio() {
     if (droneOscillator) droneOscillator.stop();
     if (tremoloOscillator) tremoloOscillator.stop();
     if (noiseNode) noiseNode.stop();
-    if (audioContext) audioContext.close();
+
+    if (audioContext && closeContext) {
+      audioContext.close();
+    }
   } catch (error) {
     // Audio may already be stopped.
   }
@@ -257,7 +282,10 @@ function stopForbiddenAudio() {
   droneOscillator = null;
   tremoloOscillator = null;
   noiseNode = null;
-  audioContext = null;
+
+  if (closeContext) {
+    audioContext = null;
+  }
 }
 
 async function playDemonicToneLayer() {
@@ -268,21 +296,24 @@ async function playDemonicToneLayer() {
 
   await Tone.start();
 
-  const distortion = new Tone.Distortion(0.85);
+  const distortion = new Tone.Distortion(0.9);
   const pitchShift = new Tone.PitchShift(-12);
+
   const reverb = new Tone.Reverb({
-    decay: 7,
-    wet: 0.55,
+    decay: 8,
+    wet: 0.58,
   });
 
   const delay = new Tone.FeedbackDelay({
     delayTime: 0.22,
-    feedback: 0.45,
-    wet: 0.35,
+    feedback: 0.48,
+    wet: 0.38,
   });
 
+  const bitCrusher = new Tone.BitCrusher(4);
+
   const filter = new Tone.Filter({
-    frequency: 650,
+    frequency: 580,
     type: "lowpass",
     rolloff: -24,
   });
@@ -292,65 +323,68 @@ async function playDemonicToneLayer() {
       type: "sawtooth",
     },
     envelope: {
-      attack: 0.25,
-      decay: 0.4,
-      sustain: 0.35,
-      release: 1.8,
-    },
-    filterEnvelope: {
-      attack: 0.1,
-      decay: 0.3,
-      sustain: 0.2,
-      release: 1,
+      attack: 0.18,
+      decay: 0.45,
+      sustain: 0.28,
+      release: 1.9,
     },
   });
 
-  synth.chain(distortion, pitchShift, delay, reverb, filter, Tone.Destination);
+  synth.chain(
+    distortion,
+    bitCrusher,
+    pitchShift,
+    delay,
+    reverb,
+    filter,
+    Tone.Destination,
+  );
 
   const now = Tone.now();
 
   synth.triggerAttackRelease("C2", "1n", now);
-  synth.triggerAttackRelease("G1", "1n", now + 0.45);
-  synth.triggerAttackRelease("F1", "1n", now + 0.9);
-  synth.triggerAttackRelease("C1", "1n", now + 1.35);
+  synth.triggerAttackRelease("G1", "1n", now + 0.35);
+  synth.triggerAttackRelease("F1", "1n", now + 0.7);
+  synth.triggerAttackRelease("C1", "1n", now + 1.1);
+
+  setTimeout(() => {
+    synth.dispose();
+    distortion.dispose();
+    bitCrusher.dispose();
+    pitchShift.dispose();
+    reverb.dispose();
+    delay.dispose();
+    filter.dispose();
+  }, 5500);
 }
 
 function playWhisperBurst() {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  }
+  const ctx = ensureAudioContext();
 
-  const bufferSize = audioContext.sampleRate * 0.8;
-  const buffer = audioContext.createBuffer(
-    1,
-    bufferSize,
-    audioContext.sampleRate,
-  );
+  const bufferSize = ctx.sampleRate * 0.8;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
   const data = buffer.getChannelData(0);
 
   for (let i = 0; i < bufferSize; i++) {
     data[i] = (Math.random() * 2 - 1) * 0.08;
   }
 
-  const source = audioContext.createBufferSource();
+  const source = ctx.createBufferSource();
   source.buffer = buffer;
 
-  const filter = audioContext.createBiquadFilter();
+  const filter = ctx.createBiquadFilter();
   filter.type = "bandpass";
   filter.frequency.value = 900;
   filter.Q.value = 4;
 
-  const gain = audioContext.createGain();
-  gain.gain.setValueAtTime(0.001, audioContext.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.08, audioContext.currentTime + 0.08);
-  gain.gain.exponentialRampToValueAtTime(
-    0.001,
-    audioContext.currentTime + 0.75,
-  );
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 0.08);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.75);
 
   source.connect(filter);
   filter.connect(gain);
-  gain.connect(audioContext.destination);
+  gain.connect(ctx.destination);
 
   source.start();
 }
@@ -358,26 +392,45 @@ function playWhisperBurst() {
 function speakDemonicLine(text, delay = 0) {
   if (!("speechSynthesis" in window)) return;
 
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     const main = new SpeechSynthesisUtterance(text);
-    main.rate = 0.48;
-    main.pitch = 0.18;
-    main.volume = 0.45;
+    main.rate = 0.42;
+    main.pitch = 0.08;
+    main.volume = 0.42;
 
-    const echo = new SpeechSynthesisUtterance(text);
-    echo.rate = 0.36;
-    echo.pitch = 0.05;
-    echo.volume = 0.22;
+    const lowEcho = new SpeechSynthesisUtterance(text);
+    lowEcho.rate = 0.32;
+    lowEcho.pitch = 0.01;
+    lowEcho.volume = 0.22;
+
+    const highGhost = new SpeechSynthesisUtterance(text);
+    highGhost.rate = 0.7;
+    highGhost.pitch = 0.55;
+    highGhost.volume = 0.11;
 
     triggerGlitch();
     playWhisperBurst();
+    playDemonicToneLayer();
+
     speechSynthesis.speak(main);
 
-    setTimeout(() => {
+    const echoTimeout = setTimeout(() => {
       playWhisperBurst();
-      speechSynthesis.speak(echo);
-    }, 280);
+      speechSynthesis.speak(lowEcho);
+    }, 240);
+
+    const ghostTimeout = setTimeout(() => {
+      speechSynthesis.speak(highGhost);
+    }, 470);
+
+    const extraToneTimeout = setTimeout(() => {
+      playDemonicToneLayer();
+    }, 760);
+
+    speechTimeouts.push(echoTimeout, ghostTimeout, extraToneTimeout);
   }, delay);
+
+  speechTimeouts.push(timeoutId);
 }
 
 async function playForbiddenAudio() {
@@ -388,7 +441,9 @@ async function playForbiddenAudio() {
     speechSynthesis.cancel();
   }
 
-  transcript.innerHTML = "";
+  if (transcript) {
+    transcript.innerHTML = "";
+  }
 
   const spokenLines = [
     "Do not listen.",
@@ -399,79 +454,16 @@ async function playForbiddenAudio() {
     "Run.",
   ];
 
-  // Tone.js demonic layer
-  async function playDemonicToneLayer() {
-    if (typeof Tone === "undefined") return;
-
-    await Tone.start();
-
-    const distortion = new Tone.Distortion(0.85);
-    const pitchShift = new Tone.PitchShift(-12);
-
-    const reverb = new Tone.Reverb({
-      decay: 8,
-      wet: 0.55,
-    });
-
-    const delay = new Tone.FeedbackDelay({
-      delayTime: 0.22,
-      feedback: 0.42,
-      wet: 0.35,
-    });
-
-    const filter = new Tone.Filter({
-      frequency: 600,
-      type: "lowpass",
-      rolloff: -24,
-    });
-
-    const synth = new Tone.MonoSynth({
-      oscillator: {
-        type: "sawtooth",
-      },
-      envelope: {
-        attack: 0.25,
-        decay: 0.4,
-        sustain: 0.35,
-        release: 1.8,
-      },
-    });
-
-    synth.chain(
-      distortion,
-      pitchShift,
-      delay,
-      reverb,
-      filter,
-      Tone.Destination,
-    );
-
-    const now = Tone.now();
-
-    synth.triggerAttackRelease("C2", "1n", now);
-    synth.triggerAttackRelease("G1", "1n", now + 0.35);
-    synth.triggerAttackRelease("F1", "1n", now + 0.7);
-    synth.triggerAttackRelease("C1", "1n", now + 1.1);
-
-    setTimeout(() => {
-      synth.dispose();
-      distortion.dispose();
-      pitchShift.dispose();
-      reverb.dispose();
-      delay.dispose();
-      filter.dispose();
-    }, 5000);
-  }
-
   spokenLines.forEach((line, index) => {
     speakDemonicLine(line, 1200 + index * 2300);
   });
 
   let index = 0;
 
-  const interval = setInterval(() => {
+  transcriptInterval = setInterval(() => {
     if (index >= transcriptLines.length) {
-      clearInterval(interval);
+      clearInterval(transcriptInterval);
+      transcriptInterval = null;
       return;
     }
 
@@ -480,24 +472,22 @@ async function playForbiddenAudio() {
 
     if (line.textContent.includes("VOICE")) {
       line.classList.add("voice");
-
       playWhisperBurst();
       playDemonicToneLayer();
       triggerGlitch();
 
-      document.body.style.filter = `
-        contrast(1.08)
-        brightness(1.04)
-        saturate(1.1)
-      `;
+      document.body.style.filter =
+        "contrast(1.08) brightness(1.04) saturate(1.1)";
 
       setTimeout(() => {
         document.body.style.filter = "";
       }, 900);
     }
 
-    transcript.appendChild(line);
-    transcript.scrollTop = transcript.scrollHeight;
+    if (transcript) {
+      transcript.appendChild(line);
+      transcript.scrollTop = transcript.scrollHeight;
+    }
 
     index++;
   }, 520);
@@ -533,14 +523,16 @@ if (searchInput) {
   });
 }
 
-setTimeout(() => {
-  breachAlert.classList.add("active");
-  triggerGlitch();
-
+if (breachAlert) {
   setTimeout(() => {
-    breachAlert.classList.remove("active");
-  }, 3200);
-}, 24000);
+    breachAlert.classList.add("active");
+    triggerGlitch();
+
+    setTimeout(() => {
+      breachAlert.classList.remove("active");
+    }, 3200);
+  }, 24000);
+}
 
 const observer = new IntersectionObserver(
   (entries) => {
