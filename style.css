@@ -25,6 +25,51 @@ html {
   --panel: rgba(18, 17, 16, 0.96);
 }
 
+.left-red-hue,
+.hypnotic-bg,
+.fingerprint-bg {
+  z-index: 0;
+}
+
+.layout,
+.mobile-nav,
+.modal,
+.decrypt-screen,
+.breach-alert {
+  position: relative;
+}
+
+.layout {
+  z-index: 2;
+}
+
+.classified-stamp,
+.whisper {
+  z-index: 60;
+}
+
+.grain,
+.scanlines,
+.vignette {
+  z-index: 40;
+}
+
+.cursor-trail {
+  z-index: 9999;
+}
+
+.decrypt-screen {
+  z-index: 3000;
+}
+
+.breach-alert {
+  z-index: 2500;
+}
+
+.modal {
+  z-index: 2000;
+}
+
 body {
   min-height: 100vh;
   background:
@@ -48,7 +93,7 @@ body {
   position: fixed;
   inset: 0 auto 0 0;
   width: 42vw;
-  z-index: -6;
+  z-index: 0;
   pointer-events: none;
   background:
     radial-gradient(circle at 0 45%, rgba(255, 59, 49, 0.38), transparent 55%),
@@ -86,7 +131,7 @@ body.glitching {
 .hypnotic-bg {
   position: fixed;
   inset: -35%;
-  z-index: -8;
+  z-index: 0;
   pointer-events: none;
   opacity: 0.3;
   background: repeating-radial-gradient(
@@ -122,7 +167,7 @@ body.glitching {
 .fingerprint-bg {
   position: fixed;
   inset: 0;
-  z-index: -7;
+  z-index: 0;
   pointer-events: none;
   opacity: 0.28;
   background:
